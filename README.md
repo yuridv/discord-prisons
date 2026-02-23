@@ -43,7 +43,6 @@ No diretório do projeto, você pode executar os seguintes scripts:
 
 - **discord.js**: Biblioteca oficial da plataforma Discord.
 - **dotenv-safe**: Gerencia as variáveis do arquivo `.env`.
-- **mongoose**: Gerencia a interação da aplicação com o banco de dados MongoDB.
 
 
 ### Desenvolvimento

@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yuridv/discord-prision.git"
+    "url": "git+https://github.com/yuridv/discord-prisions.git"
   },
   "keywords": [
     "node",
@@ -24,19 +24,18 @@
   "author": "Yuri",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yuridv/discord-prision/issues"
+    "url": "https://github.com/yuridv/discord-prisions/issues"
   },
-  "homepage": "https://github.com/yuridv/discord-prision#readme",
+  "homepage": "https://github.com/yuridv/discord-prisions#readme",
   "engines": {
     "node": ">=24.0.0"
   },
   "dependencies": {
     "discord.js": "^14.22.1",
-    "dotenv-safe": "^9.1.0",
-    "mongoose": "^9.2.1"
+    "dotenv-safe": "^9.1.0"
   },
   "devDependencies": {
-    "eslint": "^10.0.1",
+    "eslint": "^8.57.1",
     "nodemon": "^3.1.10"
   }
 }
