@@ -1,0 +1,58 @@
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags, PermissionFlagsBits } = require('discord.js');
+
+const { Errors } = require('../../utils/functions');
+const config = require('../../../config.json');
+
+const command = async(client, interaction, args) => {
+  try {
+    if (!interaction.member.permissions.has(PermissionFlagsBits.ADMINISTRATOR)) {
+      return interaction.reply({ flags: MessageFlags.Ephemeral, content: 'Você não possui permissão de administrador para utilizar esse comando!' });
+    }
+
+    const newPrison = new ButtonBuilder()
+      .setCustomId('prison')
+      .setEmoji('🚨')
+      .setLabel('Registrar Prisão')
+      .setStyle(ButtonStyle.Primary);
+
+    const row = new ActionRowBuilder()
+      .addComponents(newPrison);
+
+    const embed = new EmbedBuilder()
+      .setAuthor({ name: `${config.name}・${config.city}`, iconURL: config.avatar })
+      .setThumbnail(config.avatar)
+      .setColor(config.color)
+      .setDescription(
+        `*Seja bem vindo ao nosso canal de * ***Prisões*** *da cidade* ***${config.city}***!` +
+        '\n*Aqui você pode efetuar o registro de uma nova prisão!*' +
+        
+        '\n\n> **Como registrar uma nova prisão?**' +
+        '\n1º Clique no botão abaixo **"Registrar Prisão"**' +
+        '\n2º Será aberto um formulário para você preencher os dados da prisão!' +
+        // '\n3º Você precisará informar o seu **ID** da cidade!' +
+        // '\n4º Você precisará informar o seu **Nome e Sobrenome** da cidade!' +
+        // '\n5º Você precisará informar o seu **Número de Telefone** da cidade!' +
+        // '\n6º Você precisará informar o **ID** de quem te **Recrutou**!' +
+        // '\n7º Você precisará entrar no servidor **Facções**!' +
+
+        '\n\n> **Informações**' +
+        '\n• *Após efetuar o registro da prisão, ele ficará salvo no canal de prisões!*' +
+
+        `\n\n*__Atenciosamente ${config.name}・${config.city}__*`
+      );
+
+    return interaction.reply({
+      embeds: [ embed ],
+      components: [ row ]
+    });
+  } catch(err) {
+    return Errors(err, `Command ${__filename}`)
+      .then(() => command(client, interaction, args))
+      .catch((e) => interaction.reply({ content: e.error, flags: MessageFlags.Ephemeral }));
+  }
+};
+
+module.exports = { 
+  route: command,
+  description: '💬 [Mensagens] 💬 | Comando para gerar a mensagem de novas prisões.'
+};
