@@ -5,7 +5,7 @@ const event = async(client, interaction) => {
     // Interações em forma de comandos
     if (interaction.isChatInputCommand()) {
       const command = client.commands.find(r => r.name === interaction.commandName);
-      if (!command || !command.route) return;
+      if (!command?.route) return;
 
       const args = interaction.options._hoistedOptions;
       await command.route(client, interaction, args);

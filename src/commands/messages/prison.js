@@ -6,7 +6,11 @@ const config = require('../../../config.json');
 const command = async(client, interaction, args) => {
   try {
     if (!interaction.member.permissions.has(PermissionFlagsBits.ADMINISTRATOR)) {
-      return interaction.reply({ flags: MessageFlags.Ephemeral, content: 'Você não possui permissão de administrador para utilizar esse comando!' });
+      const embed = new EmbedBuilder()
+        .setColor('#FF0000')
+        .setDescription('❌ • *Você não possui permissão de* __***ADMINISTRADOR***__ *para utilizar esse comando!*');
+
+      return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ] });
     }
 
     const newPrison = new ButtonBuilder()
@@ -19,7 +23,7 @@ const command = async(client, interaction, args) => {
       .addComponents(newPrison);
 
     const embed = new EmbedBuilder()
-      .setAuthor({ name: `${config.name}・${config.city}`, iconURL: config.avatar })
+      .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL() })
       .setThumbnail(config.avatar)
       .setColor(config.color)
       .setDescription(
@@ -38,7 +42,7 @@ const command = async(client, interaction, args) => {
         '\n\n> **Informações**' +
         '\n• *Após efetuar o registro da prisão, ele ficará salvo no canal de prisões!*' +
 
-        `\n\n*__Atenciosamente ${config.name}・${config.city}__*`
+        `\n\n*__Atenciosamente ${client.user.username}__*`
       );
 
     return interaction.reply({
