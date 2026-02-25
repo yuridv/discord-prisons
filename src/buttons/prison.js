@@ -23,7 +23,7 @@ const command = async(client, interaction, args) => {
       .setDescription('Selecione até 2 oficias responsáveis pelo registro da prisão do réu.')
       .setUserSelectMenuComponent(
         new UserSelectMenuBuilder()
-          .setCustomId('users-prison')
+          .setCustomId('users_prison')
           .setPlaceholder('Selecione os até 2 oficiais')
           .setMinValues(1)
           .setMaxValues(2)
@@ -34,30 +34,30 @@ const command = async(client, interaction, args) => {
       .setDescription('Selecione até 2 oficias responsáveis pela prisão do réu.')
       .setUserSelectMenuComponent(
         new UserSelectMenuBuilder()
-          .setCustomId('users-primary')
+          .setCustomId('users_primary')
           .setPlaceholder('Selecione os até 2 oficias')
           .setMinValues(1)
           .setMaxValues(2)
       );
 
     const nameAttorney = new LabelBuilder()
-      .setLabel('Nome [Passaporte] do Advogado')
-      .setDescription('Escreva o nome do advogado responsável pela defesa do réu.')
+      .setLabel('Identidade do Advogado')
+      .setDescription('Escreva o nome e o passaporte do advogado responsável pela defesa do réu.')
       .setTextInputComponent(
         new TextInputBuilder()
-          .setCustomId('name-attorney')
-          .setPlaceholder('Exemplo: Fulano Fulano [666]')
+          .setCustomId('name_attorney')
+          .setPlaceholder('Exemplo: Fulano Fulano [123]')
           .setStyle(TextInputStyle.Short)
           .setRequired(false)
       );
 
     const namePrisoner = new LabelBuilder()
-      .setLabel('Nome [Passaporte] do Réu')
-      .setDescription('Escreva o nome do réu que está sendo conduzido réu.')
+      .setLabel('Identidade do Réu')
+      .setDescription('Escreva o nome e o passaporte do réu que está sendo conduzido réu.')
       .setTextInputComponent(
         new TextInputBuilder()
-          .setCustomId('name-prisoner')
-          .setPlaceholder('Exemplo: Fulano Fulano [666]')
+          .setCustomId('name_prisoner')
+          .setPlaceholder('Exemplo: Fulano Fulano [123]')
           .setStyle(TextInputStyle.Short)
       );
 
@@ -66,7 +66,7 @@ const command = async(client, interaction, args) => {
       .setDescription('Escreva a lista dos artigos atribuídos ao réu.')
       .setTextInputComponent(
         new TextInputBuilder()
-          .setCustomId('list-articles')
+          .setCustomId('list_articles')
           .setPlaceholder('Exemplo:\nTrafico de Drogas,\nPosse de Dinheiro Sujo (100K),\nTentativa de Fuga')
           .setStyle(TextInputStyle.Paragraph)
       );
@@ -76,7 +76,7 @@ const command = async(client, interaction, args) => {
       .setDescription('Digite o número total de meses que o réu deverá cumprir.')
       .setTextInputComponent(
         new TextInputBuilder()
-          .setCustomId('number-months')
+          .setCustomId('number_months')
           .setPlaceholder('Exemplo: 100')
           .setStyle(TextInputStyle.Short)
       );
@@ -86,7 +86,7 @@ const command = async(client, interaction, args) => {
       .setDescription('Informe o valor total da multa aplicada ao réu.')
       .setTextInputComponent(
         new TextInputBuilder()
-          .setCustomId('amount-fine')
+          .setCustomId('amount_fine')
           .setPlaceholder('Exemplo: 100')
           .setStyle(TextInputStyle.Short)
       );
@@ -96,7 +96,7 @@ const command = async(client, interaction, args) => {
       .setDescription('Selecione as reduções aplicada na pena do réu.')
       .setStringSelectMenuComponent(
         new StringSelectMenuBuilder()
-          .setCustomId('amount-reduction')
+          .setCustomId('amount_reduction')
           .setPlaceholder('Selecione as reduções aplicada na pena do réu')
           .addOptions( // No máximo 25 opções
             reductions.map((reduction) => 
@@ -111,12 +111,15 @@ const command = async(client, interaction, args) => {
       usersPrison,
       usersPrimary,
       nameAttorney,
-      // namePrisoner,
-      listArticles,
-      // numberMonths,
-      // amountFine,
-      amountReduction
+      namePrisoner
     ); 
+
+    // modal.addLabelComponents(
+    //   listArticles,
+    //   numberMonths,
+    //   amountFine,
+    //   amountReduction
+    // );
 
     await interaction.showModal(modal);
 

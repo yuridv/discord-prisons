@@ -21,6 +21,17 @@ const event = async(client, interaction) => {
 
       await button.route(client, interaction, args);
     }
+
+    // Interações em forma de formulários / modals
+    else if (interaction.isModalSubmit()) {
+      const id = interaction.customId.split('-')[0];
+      const args = interaction.customId.split('-').filter((r, i) => i !== 0);
+
+      const modal = client.modals.find(r => r.name === id);
+      if (!modal || !modal.route) return;
+
+      await modal.route(client, interaction, args);
+    }
   } catch(err) {
     return Errors(err, `Event ${__filename}`)
       .then(() => event(client, interaction))

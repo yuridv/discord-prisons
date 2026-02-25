@@ -35,6 +35,10 @@ base.client.buttons = [];
 const Buttons = Files('./src/buttons/', { removeDir: 1 });
 for (const b in Buttons) base.client.buttons.push({ name: b, ...Buttons[b] });
 
+base.client.modals = [];
+const Modals = Files('./src/modals/', { removeDir: 1 });
+for (const m in Modals) base.client.modals.push({ name: m, ...Modals[m] });
+
 base.client.login(process.env.BOT_TOKEN)
   .then(() => {
     const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
