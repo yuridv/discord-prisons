@@ -32,7 +32,8 @@
   },
   "dependencies": {
     "discord.js": "^14.22.1",
-    "dotenv-safe": "^9.1.0"
+    "dotenv-safe": "^9.1.0",
+    "mongoose": "^9.2.4"
   },
   "devDependencies": {
     "eslint": "^8.57.1",

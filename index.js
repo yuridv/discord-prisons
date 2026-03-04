@@ -3,7 +3,7 @@ require('dotenv-safe').config();
 const { Client, GatewayIntentBits, REST, Routes } = require('discord.js');
 
 const { base, colors } = require('./src/utils/bases');
-const { Files } = require('./src/utils/functions');
+const { Files, MongoDB } = require('./src/utils/functions');
 
 console.log(colors.YELLOW + '[Discord]=> Starting...' + colors.RESET);
 
@@ -39,9 +39,13 @@ base.client.modals = [];
 const Modals = Files('./src/modals/', { removeDir: 1 });
 for (const m in Modals) base.client.modals.push({ name: m, ...Modals[m] });
 
-base.client.login(process.env.BOT_TOKEN)
-  .then(() => {
-    const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
-    rest.put(Routes.applicationCommands(base.client.user.id), { body: base.client.commands });
-  })
+MongoDB()
+  .then(() => 
+    base.client.login(process.env.BOT_TOKEN)
+      .then(() => {
+        const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
+        rest.put(Routes.applicationCommands(base.client.user.id), { body: base.client.commands });
+      })
+      .catch((err) => console.log(`${colors.RED}[Discord Error]=> ${colors.RESET}`, err))
+  )
   .catch((err) => console.log(`${colors.RED}[Discord Error]=> ${colors.RESET}`, err));
