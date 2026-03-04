@@ -66,7 +66,7 @@ const command = async(client, interaction, args) => {
             text.setContent(`${emoji.arrow_right_animated} **Oficiais Penitenciários:** \`\`\`ini\n[1001] Dragon Luthor\n[1002] Mel Lysenko\`\`\``)
           )
           .setButtonAccessory((button) =>
-            button.setCustomId('edit_penal').setEmoji({ id: emoji.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
+            button.setCustomId('prison_edit-offices_prison').setEmoji({ id: emoji.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
           )
       )
       .addSectionComponents((section) =>
@@ -75,7 +75,7 @@ const command = async(client, interaction, args) => {
             text.setContent(`${emoji.arrow_right_animated} **Oficiais Primária:** \`\`\`ini\n[1003] João Fulano\n[1004] Maria Fulana\`\`\``)
           )
           .setButtonAccessory((button) =>
-            button.setCustomId('edit_primaria').setEmoji({ id: emoji.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
+            button.setCustomId('prison_edit-offices_primary').setEmoji({ id: emoji.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
           )
       )
       .addSectionComponents((section) =>
@@ -84,7 +84,7 @@ const command = async(client, interaction, args) => {
             text.setContent(`${emoji.arrow_right_animated} **Advogado da Defesa:** \`\`\`ini\n❌ O réu dispensou a presença de um advogado ❌\`\`\``)
           )
           .setButtonAccessory((button) =>
-            button.setCustomId('edit_advogado').setEmoji({ id: emoji.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
+            button.setCustomId('prison_edit-attorney').setEmoji({ id: emoji.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
           )
       )
 
@@ -152,9 +152,9 @@ const command = async(client, interaction, args) => {
           .setThumbnailAccessory((thumbnail) => thumbnail.setURL('https://media.discordapp.net/attachments/1449501267880710298/1477854665986019418/image.png?ex=69a8e9e9&is=69a79869&hm=22e8957ff001853b4036c12e0f59a5eb3e633bf8359b04cc74fae71c18e42d67&=&format=webp'))
       )
 
-      // .addMediaGalleryComponents((mediaGallery) => 
-      //   mediaGallery.addItems((item) => item.setDescription('alt text displaying on the image').setURL('https://media.discordapp.net/attachments/1382899414288433193/1477853988329099335/image.png?ex=69a84088&is=69a6ef08&hm=f620725ba28ef69521e7896b4e5009315ee74f3876d17d2af34f94f7a80cdcf2&=&format=webp&width=1024&height=1024'))
-      // )
+    // .addMediaGalleryComponents((mediaGallery) => 
+    //   mediaGallery.addItems((item) => item.setDescription('alt text displaying on the image').setURL('https://media.discordapp.net/attachments/1382899414288433193/1477853988329099335/image.png?ex=69a84088&is=69a6ef08&hm=f620725ba28ef69521e7896b4e5009315ee74f3876d17d2af34f94f7a80cdcf2&=&format=webp&width=1024&height=1024'))
+    // )
 
 
     /* .addSectionComponents((section) =>
