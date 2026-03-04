@@ -1,14 +1,15 @@
-const { Errors } = require('../../utils/functions');
 const { PermissionFlagsBits, EmbedBuilder, MessageFlags } = require('discord.js');
 
+const { Errors } = require('../../utils/functions');
 const config = require('../../../config.json');
+const emoji = require('../../../emojis.json');
 
 const command = async(client, interaction, args) => {
   try {
     if (!interaction.member.permissions.has(PermissionFlagsBits.ADMINISTRATOR)) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
-        .setDescription('❌ • *Você não possui permissão de* __***ADMINISTRADOR***__ *para utilizar esse comando!*');
+        .setDescription(`${emoji.error} • *Você não possui permissão de* __***ADMINISTRADOR***__ *para utilizar esse comando!*`);
 
       return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ] });
     }
@@ -29,11 +30,11 @@ const command = async(client, interaction, args) => {
 
     await interaction.guild.channels.cache.get(config.channel_logs_prisons).send({ embeds: [ embed ] });
 
-    await interaction.reply({ flags: MessageFlags.Ephemeral, content: '✅ | Log de teste enviado com sucesso!' });
+    await interaction.reply({ flags: MessageFlags.Ephemeral, content: `${emoji.success} | Log de teste enviado com sucesso!` });
   } catch (err) {
     return Errors(err, `Command ${__filename}`)
       .then(() => command(client, interaction, args))
-      .catch((e) => interaction.editReply({ content: '❌ | ' + e.error, flags: MessageFlags.Ephemeral }));
+      .catch((e) => interaction.reply({ content: `${emoji.error} | ` + e.error, flags: MessageFlags.Ephemeral }));
   }
 };
 
