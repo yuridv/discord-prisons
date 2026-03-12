@@ -22,13 +22,13 @@ const command = async(client, interaction, args) => {
         { name: 'Oficial(is)', value: '```ini\n[2860] Dragon Luthor\n[2877] Mel Lysenko```', inline: false },
         { name: 'Prendeu', value: '```ini\n[2237] Danoninho Martinez```', inline: false },
         // spell-checker: enable
-        { name: 'Artigos', value: 'Artigo 142 - Corrida Ilegal, Artigo 157 - Posse Ilegal de Arma Longa, Artigo 171 - Posse de Dinheiro Sujo (acima de 250K)', inline: false },
+        { name: 'Artigos', value: 'Artigo 20 - Desobediência à ordem legal / Resistência à prisão, Artigo 19 - Desacato à autoridade, Artigo 34 - Difamação, Artigo 60 - Porte ilegal de Armamento Pesado', inline: false },
         { name: 'Tempo de prisão', value: '240 meses', inline: true },
         { name: 'Valor em Multas', value: '$200000', inline: true }
       ])
       .setImage('https://media.discordapp.net/attachments/1382899414288433193/1477853988329099335/image.png?ex=69a84088&is=69a6ef08&hm=f620725ba28ef69521e7896b4e5009315ee74f3876d17d2af34f94f7a80cdcf2&=&format=webp');
 
-    await interaction.guild.channels.cache.get(config.channel_logs_prisons).send({ embeds: [ embed ] });
+    await interaction.guild.channels.cache.get(config.channels.logs).send({ embeds: [ embed ] });
 
     await interaction.reply({ flags: MessageFlags.Ephemeral, content: `${emoji.success} | Log de teste enviado com sucesso!` });
   } catch (err) {

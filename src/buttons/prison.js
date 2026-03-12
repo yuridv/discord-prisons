@@ -6,7 +6,7 @@ const config = require('../../config.json');
 
 const command = async(client, interaction, args) => {
   try {
-    if (!interaction.member.roles.cache.has(config.role_prison)) {
+    if (!interaction.member.roles.cache.has(config.roles.prison)) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
         .setDescription('❌ • *Você não possui o* __***Curso Prisional***__ *para efetuar prisões!*');

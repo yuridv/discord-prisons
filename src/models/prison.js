@@ -1,41 +1,47 @@
 const mongoose = require('mongoose');
 
+const userSchema = new mongoose.Schema({
+  id: { type: Number, required: true }, // ID do usuário
+  name: { type: String, required: true } // Nome do usuário
+}, { _id: false });
+
+const articleSchema = new mongoose.Schema({
+  article: { type: Number, required: true, unique: true }, // Código do artigo
+  name: { type: String, required: true }, // Nome do artigo
+  time: { type: Number }, // Tempo da prisão em minutos do artigo
+  fine: { type: Number }, // Multa do artigo
+  bail: { type: Number }, // Fiança do artigo
+  bail_paid: { type: Boolean } // Se a fiança foi paga
+}, { _id: false });
+
+const reductionSchema = new mongoose.Schema({
+  name: { type: String, required: true }, // Nome da redução
+  percentage: { type: Number, required: true } // Porcentagem da redução
+}, { _id: false });
+
+const evidenceSchema = new mongoose.Schema({
+  type: { type: String, required: true }, // Tipo da evidencia
+  url: { type: String, required: true } // Link da evidencia
+}, { _id: false });
+
 const schema = new mongoose.Schema({
   status: { type: String, required: true, default: 'pending' }, // Status do registro da prisão
-  offices_prison: [ userSchema ], // Oficiais responsáveis pelo registro da prisão
-  offices_primary: [ userSchema ], // Oficiais responsáveis pela prisão
-  attorney: { // Identificação do Advogado
+  officers_prison: [ userSchema ], // Oficiais responsáveis pelo registro da prisão
+  officers_conduction: [ userSchema ], // Oficiais responsáveis pela condução
+  attorney: { // Identificação do advogado
     id: { type: Number },
-    name: { type: String }
+    name: { type: String },
+    exemption: { type: String }
   },
-  prisoner: { // Identificação do Preso
+  prisoner: { // Identificação do preso
     id: { type: Number, required: true },
     name: { type: String, required: true }
   },
   articles: [ articleSchema ], // Artigos da prisão
   months: { type: Number, required: true }, // Tempo total da pena
   fine: { type: Number, required: true }, // Multa total
-  reduction: [ reductionSchema ] // Reduções aplicadas
+  reduction: [ reductionSchema ], // Reduções aplicadas
+  evidences: [ evidenceSchema ] // Evidencias anexadas
 }, { timestamps: true });
-
-const userSchema = new mongoose.Schema({
-  id: { type: Number, required: true }, // ID do Usuario
-  name: { type: String, required: true } // Nome do Usuario
-}, { _id: false });
-
-const articleSchema = new mongoose.Schema({
-  code: { type: String, required: true, unique: true }, // Codigo do Artigo
-  name: { type: String, required: true }, // Nome do Artigo
-  months: { type: Number }, // Quantidade de meses penitenciários do Artigo
-  fine: { type: Number }, // Multa do Artigo
-  bail: { type: Number }, // Fiança do Artigo
-  bail_paid: { type: Boolean } // Se a fiança foi paga
-}, { _id: false });
-
-const reductionSchema = new mongoose.Schema({
-  name: { type: String, required: true }, // Nome da Redução
-  percentage: { type: Number, required: true } // Porcentagem da Redução
-}, { _id: false });
-
 
 module.exports = mongoose.model('Prison', schema);
