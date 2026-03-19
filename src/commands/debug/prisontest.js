@@ -6,6 +6,8 @@ const emoji = require('../../../emojis.json');
 
 const command = async(client, interaction, args) => {
   try {
+    return require('../../buttons/prison/message').route(client, interaction, [ '69bc0f3e568e72cfdd640e40' ]);
+
     if (!interaction.member.permissions.has(PermissionFlagsBits.ADMINISTRATOR)) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
@@ -66,7 +68,7 @@ const command = async(client, interaction, args) => {
             text.setContent(`${emoji.arrow_right_animated} **Oficiais Penitenciários:** \`\`\`ini\n[1001] Dragon Luthor\n[1002] Mel Lysenko\`\`\``)
           )
           .setButtonAccessory((button) =>
-            button.setCustomId('prison_edit-offices_prison').setEmoji({ id: emoji.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
+            button.setCustomId('prison/edit-offices_prison').setEmoji({ id: emoji.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
           )
       )
       .addSectionComponents((section) =>
@@ -75,7 +77,7 @@ const command = async(client, interaction, args) => {
             text.setContent(`${emoji.arrow_right_animated} **Oficiais Primária:** \`\`\`ini\n[1003] João Fulano\n[1004] Maria Fulana\`\`\``)
           )
           .setButtonAccessory((button) =>
-            button.setCustomId('prison_edit-offices_primary').setEmoji({ id: emoji.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
+            button.setCustomId('prison/edit-offices_primary').setEmoji({ id: emoji.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
           )
       )
       .addSectionComponents((section) =>
@@ -84,7 +86,7 @@ const command = async(client, interaction, args) => {
             text.setContent(`${emoji.arrow_right_animated} **Advogado da Defesa:** \`\`\`ini\n❌ O réu dispensou a presença de um advogado ❌\`\`\``)
           )
           .setButtonAccessory((button) =>
-            button.setCustomId('prison_edit-attorney').setEmoji({ id: emoji.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
+            button.setCustomId('prison/edit-attorney').setEmoji({ id: emoji.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
           )
       )
 
@@ -126,7 +128,7 @@ const command = async(client, interaction, args) => {
               `\n${emoji.arrow_right_animated} **Fianças Pagas:** \`\`\`ini\nArtigo 142 - Corrida Ilegal [R$ 50.000,00]\`\`\``
             )
           )
-          .setThumbnailAccessory((thumbnail) => thumbnail.setURL('https://media.discordapp.net/attachments/1449501267880710298/1477854665638154342/image.png?ex=69a8e9e9&is=69a79869&hm=f5027fda4c5e277bc063074cdda997e0fbd6b65be5ba523cae2d41089154da29&=&format=webp'))
+          .setThumbnailAccessory((thumbnail) => thumbnail.setURL('https://media.discordapp.net/attachments/1424170165154611351/1477865797765300365/image.png?ex=69bcbac7&is=69bb6947&hm=d10dadc78edf52a354b0d2cd1a1ffa0968f0cb8dfd4fda0668c61af7f411d576&=&format=webp'))
       )
 
       .addSeparatorComponents((separator) => separator)
@@ -149,8 +151,8 @@ const command = async(client, interaction, args) => {
               `\n${emoji.arrow_right_animated} **Redução de Pena:** *Réu Primário [20%]*`
             )
           )
-          .setThumbnailAccessory((thumbnail) => thumbnail.setURL('https://media.discordapp.net/attachments/1449501267880710298/1477854665986019418/image.png?ex=69a8e9e9&is=69a79869&hm=22e8957ff001853b4036c12e0f59a5eb3e633bf8359b04cc74fae71c18e42d67&=&format=webp'))
-      )
+          .setThumbnailAccessory((thumbnail) => thumbnail.setURL('https://media.discordapp.net/attachments/1424170165154611351/1477866571014869093/image.png?ex=69bcbb7f&is=69bb69ff&hm=b65ffe1b0c253450f279a5c22212c9be3f89649f7c3df6b33957c41171c6efb0&=&format=webp'))
+      );
 
     // .addMediaGalleryComponents((mediaGallery) => 
     //   mediaGallery.addItems((item) => item.setDescription('alt text displaying on the image').setURL('https://media.discordapp.net/attachments/1382899414288433193/1477853988329099335/image.png?ex=69a84088&is=69a6ef08&hm=f620725ba28ef69521e7896b4e5009315ee74f3876d17d2af34f94f7a80cdcf2&=&format=webp&width=1024&height=1024'))

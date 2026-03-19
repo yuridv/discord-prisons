@@ -1,0 +1,7 @@
+[
+  { "name": "Réu Primário [10%]", "percentage": 0.1 },
+  { "name": "Representado por um Advogado [30%]", "percentage": 0.3 },
+  { "name": "Colaborar com a Prisão (ADVOGADO) [10%]", "percentage": 0.1 },
+  { "name": "Confessar Crimes (SEM FLAGRANTE DELITO) (ADVOGADO) [10%]", "percentage": 0.1 },
+  { "name": "Delação Premiada (CIVIL) [30%]", "percentage": 0.3 }
+]

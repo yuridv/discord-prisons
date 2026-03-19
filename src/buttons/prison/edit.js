@@ -1,7 +1,7 @@
 const { MessageFlags, EmbedBuilder, ModalBuilder, UserSelectMenuBuilder, LabelBuilder, TextInputBuilder, TextInputStyle, FileUploadBuilder } = require('discord.js');
 
-const { Errors } = require('../utils/functions');
-const config = require('../../config.json');
+const { Errors } = require('../../utils/functions');
+const config = require('../../../config.json');
 
 const command = async(client, interaction, args) => {
   try {
@@ -129,9 +129,3 @@ const camps = {
 module.exports = { 
   route: command
 };
-
-const reductions = [
-  { name: 'Réu Primário [20%]', percentage: 0.2 },
-  { name: 'Presença do Advogado [30%]', percentage: 0.3 },
-  { name: 'Colaboração e Confissão [10%]', percentage: 0.1 }
-];

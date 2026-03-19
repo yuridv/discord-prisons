@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
 }, { _id: false });
 
 const articleSchema = new mongoose.Schema({
-  article: { type: Number, required: true, unique: true }, // Código do artigo
+  article: { type: Number, required: true }, // Código do artigo
   name: { type: String, required: true }, // Nome do artigo
   time: { type: Number }, // Tempo da prisão em minutos do artigo
   fine: { type: Number }, // Multa do artigo

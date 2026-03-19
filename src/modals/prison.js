@@ -5,7 +5,7 @@ const config = require('../../config.json');
 
 const command = async(client, modal, args) => {
   try {
-    console.log(modal.fields.getUploadedFiles('offices_prison_file'))
+    console.log(modal.fields.getUploadedFiles('offices_prison_file'));
   } catch(err) {
     return Errors(err, `Command ${__filename}`)
       .then(() => command(client, modal))

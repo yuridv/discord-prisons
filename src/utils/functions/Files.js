@@ -49,6 +49,11 @@ const filesObj = (dir, options = {}, path = '', result = {}) => {
     if ([ 'index.js' ].includes(file)) continue;
 
     let name = file.split('.')[0];
+    if (path && options.path) {
+      name = path + '/' + name;
+      if (name.startsWith('/')) name = name.slice(1);
+    }
+
     if (options.lower) name = name.toLowerCase();
 
     if (file.includes('.js')) {

@@ -1,13 +1,13 @@
 const { Errors } = require('../../utils/functions');
-const { articles } = require('../../utils/bases');
-
-const config = require('../../../config.json');
 const Prison = require('../../models/prison');
+
+const Articles = require('../../../articles.json');
+const config = require('../../../config.json');
 
 const event = async(client, message) => {
   try {
     if (message.channel.id !== config.channels.logs) return;
-    if (!message.embeds || !message.embeds[0] || !message.embeds[0].fields) return;
+    if (!message.embeds || !message.embeds[0] || !message.embeds[0].fields || !message.embeds[0].fields[0]) return;
 
     const embed = message.embeds[0];
 
@@ -17,9 +17,9 @@ const event = async(client, message) => {
     const prisoner = [ ...embed.fields[1].value.matchAll(/\[(\d+)]\s*([^`\n]+)/g) ]
       .map(([ , id, name ]) => ({ id: +id, name: name.trim() }))[0];
 
-    const articles_selected = [ ...embed.fields[2].value.matchAll(/Artigo\s+(\d+)\s*-\s*(.+?)(?=,\s*Artigo|$)/g) ]
+    const articles = [ ...embed.fields[2].value.matchAll(/Artigo\s+(\d+)\s*-\s*(.+?)(?=,\s*Artigo|$)/g) ]
       .map(([ , code, name ]) => (
-        articles.find((i) => i.article === Number(code.trim())) || 
+        Articles.find((i) => i.article === Number(code.trim())) || 
         { article: code.trim(), name: name.trim() }
       ));
 
@@ -34,7 +34,7 @@ const event = async(client, message) => {
         id: prisoner.id,
         name: prisoner.name
       },
-      articles: articles_selected,
+      articles: articles,
       months: months,
       fine: fine,
       evidences: [
@@ -46,7 +46,8 @@ const event = async(client, message) => {
     });
 
     await prison.save();
-    
+
+    return require('../../buttons/prison/message').route(client, message, [ prison._id ]);
   } catch(err) {
     return Errors(err, `Event ${__filename}`)
       .then(() => event(client, message))

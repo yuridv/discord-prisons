@@ -32,11 +32,11 @@ const Commands = Files('./src/commands/', { removeDir: 1 });
 for (const c in Commands) base.client.commands.push({ name: c, ...Commands[c] });
 
 base.client.buttons = [];
-const Buttons = Files('./src/buttons/', { removeDir: 1 });
+const Buttons = Files('./src/buttons/', { removeDir: 1, path: 1 });
 for (const b in Buttons) base.client.buttons.push({ name: b, ...Buttons[b] });
 
 base.client.modals = [];
-const Modals = Files('./src/modals/', { removeDir: 1 });
+const Modals = Files('./src/modals/', { removeDir: 1, path: 1 });
 for (const m in Modals) base.client.modals.push({ name: m, ...Modals[m] });
 
 MongoDB()
