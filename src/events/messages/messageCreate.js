@@ -30,6 +30,7 @@ const event = async(client, message) => {
     const prison = new Prison({
       status: 'pending',
       officers_prison: officials.filter((_, i) => i < 2),
+      officers_conduction: officials.filter((_, i) => i >= 2),
       prisoner: {
         id: prisoner.id,
         name: prisoner.name

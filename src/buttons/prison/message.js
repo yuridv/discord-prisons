@@ -35,42 +35,148 @@ const command = async(client, interaction, args) => {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
         .setDescription(`${emojis.error} • *${interaction.author || interaction.user}, não encontrei o registro da prisão selecionada!*`);
-              
+
       return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ], content: `${interaction.author || interaction.user}` });
     }
 
-    const container = new ContainerBuilder()
-      .setAccentColor(parseInt(config.color.replace('#', ''), 16))
+    const menu_officials = [
+      {
+        type: 'section',
+        title: `# ${emojis.folder} ・ *Registro Penitenciário*`,
+        description: '*Esse registro penitenciário reúne os dados da prisão, incluindo informações do detido, pena aplicada e oficiais responsáveis.*',
+        button: {
+          id: 'prison',
+          emoji: emojis.plus,
+          style: ButtonStyle.Secondary
+        }
+      },
 
-      .addSectionComponents((section) =>
-        section
-          .addTextDisplayComponents((text) => 
-            text.setContent(
-              `# ${emojis.folder} ・ *Registro Penitenciário*` +
-              '\n*Esse registro penitenciário reúne os dados da prisão, incluindo informações do detido, pena aplicada e oficiais responsáveis.*\n'  
-            )
-          )
-          .setButtonAccessory((button) =>
-            button.setCustomId('prison').setEmoji({ id: emojis.plus.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
-          )
-      )
+      { type: 'separator' },
 
-      .addSeparatorComponents((separator) => separator.setSpacing(1))
+      { 
+        type: 'textDisplay',
+        title: `## ${emojis.tools} ・ ***Informações dos Envolvidos***`
+      },
+      {
+        type: 'section',
+        title: `${emojis.arrow_right_animated} **Oficiais Penitenciários:**`,
+        description: `\`\`\`ini\n${prison.officers_prison.map((office) => `[${office.id}] ${office.name}`).join('\n') || 'Não Definido'}\`\`\``,
+        button: {
+          id: 'prison/edit-offices_prison',
+          emoji: emojis.pencil,
+          style: ButtonStyle.Secondary
+        }
+      },
+      {
+        type: 'section',
+        title: `${emojis.arrow_right_animated} **Oficiais da Primária:**`,
+        description: `\`\`\`ini\n${prison.officers_conduction.map((office) => `[${office.id}] ${office.name}`).join('\n') || 'Não Definido'}\`\`\``,
+        button: {
+          id: 'prison/edit-offices_conduction',
+          emoji: emojis.pencil,
+          style: ButtonStyle.Secondary
+        }
+      },
+      {
+        type: 'section',
+        title: `${emojis.arrow_right_animated} **Advogado da Defesa:**`,
+        description: prison.attorney?.id && prison.attorney?.name &&
+          `\`\`\`ini\n[${prison.attorney.id}] ${prison.attorney.name}\`\`\``
+        || prison.attorney?.exemption &&
+          `\`\`\`ini\n${prison.attorney?.exemption}\`\`\``
+        || '```ini\nNão Definido```',
+        button: {
+          id: 'prison/edit-attorney',
+          emoji: emojis.pencil,
+          style: ButtonStyle.Secondary
+        }
+      }
+    ];
 
-      .addTextDisplayComponents((text) => 
-        text.setContent(`## ${emojis.tools} ***Informações dos Envolvidos***`)
-      )
-      .addSectionComponents((section) =>
-        section
-          .addTextDisplayComponents((text) => 
-            text.setContent(`${emojis.arrow_right_animated} **Oficiais Penitenciários:** \`\`\`ini\n${prison.officers_prison.map((office) => `[${office.id}] ${office.name}`).join('\n')}\`\`\``)
-          )
-          .setButtonAccessory((button) =>
-            button.setCustomId('prison/edit-offices_prison').setEmoji({ id: emojis.pencil.match(/\d{15,}/)[0] }).setStyle(ButtonStyle.Secondary)
-          )
-      )
+    const menu_prisoner = [
+      {
+        type: 'section',
+        title: `## ${emojis.handcuffs} ・ **Informações do Detido:**`,
+        button: {
+          id: 'prison/edit-prisoner',
+          emoji: emojis.pencil,
+          style: ButtonStyle.Secondary
+        }
+      },
+      {
+        type: 'section',
+        title: `${emojis.invisible}\n${emojis.arrow_right_animated} **Nome do Detido:**`,
+        description: `\`\`\`ini\n[${prison.prisoner.id}] ${prison.prisoner.name}\`\`\``,
+        image: prison.evidences.find((evidence) => evidence.type === 'rg')?.url
+      }
+    ];
 
-    ;
+    const menu_articles = [
+      {
+        type: 'section',
+        title: `## ${emojis.clipboard} ・ **Crimes Cometidos:**`,
+        button: {
+          id: 'prison/edit-articles',
+          emoji: emojis.pencil,
+          style: ButtonStyle.Secondary
+        }
+      },
+      {
+        type: 'section',
+        title: `${emojis.arrow_right_animated} **Artigos dos Crimes:**`,
+        description: `\`\`\`ini\n${
+          prison.articles
+            .map((article) => `Art. ${article.article} - ${article.name}`).join('\n') || 'Não Definido'
+        }\`\`\``,
+        image: prison.evidences.find((evidence) => evidence.type === 'rg')?.url
+      },
+      {
+        type: 'section',
+        title: `${emojis.arrow_right_animated} **Fianças Pagas:**`,
+        description: `\`\`\`ini\n${
+          prison.articles
+            .filter((article) => article.bail_paid)
+            .map((article) => `Art. ${article.article} - ${article.name}`).join('\n') || 'Não Definido'
+        }\`\`\``,
+        button: {
+          id: 'prison/edit-bail_paid',
+          emoji: emojis.pencil,
+          style: ButtonStyle.Secondary
+        }
+      }
+    ];
+
+    const menu_sentence = [
+      {
+        type: 'section',
+        title: `## ${emojis.pencil} ・ **Informações da Condenação:**`,
+        button: {
+          id: 'prison/edit-sentence',
+          emoji: emojis.pencil,
+          style: ButtonStyle.Secondary
+        }
+      },
+      {
+        type: 'section',
+        title: emojis.invisible,
+        description: `${emojis.arrow_right_animated} **Pena:** *${prison.months} meses*` +
+          `\n${emojis.arrow_right_animated} **Multa:** *R$ ${prison.fine}*` +
+          `\n${emojis.arrow_right_animated} **Redução:** *${prison.reduction.map((reduction) => `${reduction.name} [${reduction.percentage}]`).join(', ') || '0%'}*`,
+        image: prison.evidences.find((evidence) => evidence.type === 'rg')?.url
+      }
+    ];
+
+    const items = [
+      ...menu_officials,
+      { type: 'separator' },
+      ...menu_prisoner, 
+      { type: 'separator' },
+      ...menu_articles,
+      { type: 'separator' },
+      ...menu_sentence
+    ];
+
+    const container = newContainer(items);
 
     await channel.send({ components: [ container ], flags: MessageFlags.IsComponentsV2 });
   } catch(err) {
@@ -79,6 +185,44 @@ const command = async(client, interaction, args) => {
       .catch((e) => interaction.reply({ content: e.error, flags: MessageFlags.Ephemeral }));
   }
 };
+
+const newContainer = (items) => {
+  const container = new ContainerBuilder()
+    .setAccentColor(parseInt(config.color.replace('#', ''), 16));
+
+  for (let item of items) {
+    if (item.type === 'textDisplay') {
+      container.addTextDisplayComponents((text) => text.setContent((item.title || '') + '\n' + (item.description || '')));
+    } else if (item.type === 'section' && item.button) {
+      container.addSectionComponents((section) =>
+        section
+          .addTextDisplayComponents((text) => 
+            text.setContent((item.title || '') + '\n' + (item.description || ''))
+          )
+          .setButtonAccessory((button) =>
+            button
+              .setCustomId(item.button.id)
+              .setEmoji({ id: item.button.emoji?.match(/\d{15,}/)[0] })
+              .setStyle(item.button.style)
+          )
+      );
+    } else if (item.type === 'section' && item.image) {
+      container.addSectionComponents((section) =>
+        section
+          .addTextDisplayComponents((text) => 
+            text.setContent((item.title || '') + '\n' + (item.description || ''))
+          )
+          .setThumbnailAccessory((thumbnail) => 
+            thumbnail.setURL(item.image)
+          )
+      );
+    } else if (item.type === 'separator') {
+      container.addSeparatorComponents((separator) => separator);
+    }
+  }
+
+  return container;
+}
 
 module.exports = { 
   route: command
