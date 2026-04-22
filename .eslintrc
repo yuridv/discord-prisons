@@ -23,7 +23,7 @@
     "array-bracket-spacing": ["error", "always"], // Força espaço dentro de colchetes: [ 1, 2 ]
     "space-before-function-paren": ["error", "never"], // Proíbe espaço entre function e ()
     "arrow-spacing": ["error", { "before": true, "after": true }], // Espaços ao redor do =>
-    "max-lines": ["warn", 300],                // Avisa se arquivo tiver mais de 300 linhas
+    "max-lines": ["warn", 500],                // Avisa se arquivo tiver mais de 500 linhas
     "complexity": ["warn", 25],                // Avisa se função for muito complexa (muitos caminhos)
     "max-depth": ["warn", 4],                  // Limita profundidade (aninhamento de blocos)
     "max-params": ["warn", 5],                 // Avisa se função tem muitos parâmetros

@@ -31,7 +31,7 @@ const schema = new mongoose.Schema({
   attorney: { // Identificação do advogado
     id: { type: Number },
     name: { type: String },
-    exemption: { type: String }
+    exemption: { type: Number }
   },
   prisoner: { // Identificação do preso
     id: { type: Number, required: true },

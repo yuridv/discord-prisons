@@ -1,7 +1,9 @@
 [
-  { "name": "Réu Primário [10%]", "percentage": 0.1 },
-  { "name": "Representado por um Advogado [30%]", "percentage": 0.3 },
-  { "name": "Colaborar com a Prisão (ADVOGADO) [10%]", "percentage": 0.1 },
-  { "name": "Confessar Crimes (SEM FLAGRANTE DELITO) (ADVOGADO) [10%]", "percentage": 0.1 },
-  { "name": "Delação Premiada (CIVIL) [30%]", "percentage": 0.3 }
+  { "name": "Réu Primário [20%]", "percentage": "0.20" },
+  { "name": "Representado por um Advogado [30%]", "percentage": "0.30" },
+  { "name": "Confessar Crimes (SEM FLAGRANTE DELITO) (ADVOGADO) [20%]", "percentage": "0.200" },
+  { "name": "Processo Prisional Excedeu 30min [35%]", "percentage": "0.35" },
+  { "name": "Delação Premiada Grau 1 (CIVIL) [10%]", "percentage": "0.10" },
+  { "name": "Delação Premiada Grau 2 (CIVIL) [30%]", "percentage": "0.300" },
+  { "name": "Delação Premiada Grau 3 (CIVIL) [50%]", "percentage": "0.50" }
 ]
