@@ -11,13 +11,23 @@ const {
 } = require('discord.js');
 
 const { Errors } = require('../../utils/functions');
+const Prison = require('../../models/prison');
+
 const config = require('../../../config.json');
+const emojis = require('../../../emojis.json');
+
 const Articles = require('../../../articles.json');
 const Reductions = require('../../../reductions.json');
 
 const command = async(client, interaction, args) => {
   try {
-    if (!camps[args[0]]) return;
+    const camp = args[0];
+    const id = args[1];
+
+    if (!camp || !id) return;
+
+    const camps = JSON.parse(JSON.stringify(campsBase));
+    if (!camps[camp]) return;
 
     if (!interaction.member.roles.cache.has(config.roles.prison)) {
       const embed = new EmbedBuilder()
@@ -26,13 +36,29 @@ const command = async(client, interaction, args) => {
 
       return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ] });
     }
+
+    const prison = await Prison.findOne({ _id: id });
+    if (!prison) {
+      const embed = new EmbedBuilder()
+        .setColor('#FF0000')
+        .setDescription(`${emojis.error} • *${interaction.author || interaction.user}, não encontrei o registro da prisão selecionada!*`);
+
+      return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ], content: `${interaction.author || interaction.user}` });
+    }
+
+    if (prison.articles.length >= 1) {
+      camps.bail_paid[0].options = prison.articles
+        .map((article) => (
+          { label: `Art. ${article.article} - ` + article.name, value: String(article.article) }
+        ));
+    }
     
     const modal = new ModalBuilder()
-      .setCustomId('prison')
+      .setCustomId(`prison/edit-${id}`)
       .setTitle('Registro de Prisão');
 
     modal.addLabelComponents(
-      camps[args[0]].map((camp) => Types[camp.type](camp))
+      camps[camp].map((c) => Types[c.type](c))
     );
 
     await interaction.showModal(modal);
@@ -100,7 +126,7 @@ const Types = {
       )
 };
 
-const camps = {
+const campsBase = {
   offices_prison: [
     { 
       id: 'office_aux_prison_select', 
@@ -207,8 +233,7 @@ const camps = {
       type_text: 'Short',
       title: 'Passaporte do Detento', 
       description: 'Escreva o passaporte do detento.', 
-      placeholder: '533',
-      required: true
+      placeholder: '533'
     },
     { 
       id: 'prisoner_name', 
@@ -216,8 +241,7 @@ const camps = {
       type_text: 'Short', 
       title: 'Nome do Detento', 
       description: 'Escreva o nome do detento.', 
-      placeholder: 'Lian Ragnar',
-      required: true
+      placeholder: 'Lian Ragnar'
     },
     {
       id: 'prisoner_file', 
@@ -225,8 +249,7 @@ const camps = {
       title: 'Foto do Detento', 
       description: 'Anexe a foto do detento com o RG visível.',
       min: 1,
-      max: 1,
-      required: true
+      max: 1
     }
   ],
   articles: [
@@ -268,8 +291,7 @@ const camps = {
       title: 'Foto da Mochila', 
       description: 'Anexe a foto da mochila do detento.',
       min: 1,
-      max: 1,
-      required: true
+      max: 1
     }
   ],
   bail_paid: [
@@ -315,8 +337,7 @@ const camps = {
       title: 'Foto do Painel', 
       description: 'Anexe a foto do painel com o resultado da prisão do detento.',
       min: 1,
-      max: 1,
-      required: true
+      max: 1
     }
   ]
 };
