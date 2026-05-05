@@ -331,6 +331,14 @@ const campsBase = {
       placeholder: 'Selecione as reduções', 
       options: Reductions.map((reduction) => ({ label: reduction.name, value: String(reduction.percentage) }))
     },
+    { 
+      id: 'bo_pm', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'B.O. P.M.', 
+      description: 'Escreva a numeração do Boletim de Ocorrência registrado na PM.', 
+      placeholder: '#100'
+    },
     {
       id: 'sentence_file', 
       type: 'files',

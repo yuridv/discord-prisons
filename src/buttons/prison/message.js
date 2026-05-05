@@ -161,7 +161,8 @@ const command = async(client, interaction, args) => {
         title: emojis.invisible,
         description: `${emojis.arrow_right_animated} **Pena:** *${prison.months} meses*` +
           `\n${emojis.arrow_right_animated} **Multa:** *R$ ${prison.fine}*` +
-          `\n${emojis.arrow_right_animated} **Redução:** *${prison.reduction.map((reduction) => `${reduction.name} [${reduction.percentage}]`).join(', ') || '0%'}*`,
+          `\n${emojis.arrow_right_animated} **Redução:** *${prison.reduction.map((reduction) => `${reduction.name} [${reduction.percentage}]`).join(', ') || '0%'}*` +
+          `\n${emojis.arrow_right_animated} **B.O. PM:** *${prison.bo_pm ? '#' + prison.bo_pm?.replace('#','') : 'Não Definido'}*`,
         image: prison.evidences.find((evidence) => evidence.type === 'rg')?.url
       }
     ];
@@ -190,7 +191,7 @@ const newContainer = (items) => {
   const container = new ContainerBuilder()
     .setAccentColor(parseInt(config.color.replace('#', ''), 16));
 
-  for (let item of items) {
+  for (const item of items) {
     if (item.type === 'textDisplay') {
       container.addTextDisplayComponents((text) => text.setContent((item.title || '') + '\n' + (item.description || '')));
     } else if (item.type === 'section' && item.button) {
@@ -222,7 +223,7 @@ const newContainer = (items) => {
   }
 
   return container;
-}
+};
 
 module.exports = { 
   route: command

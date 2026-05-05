@@ -2,7 +2,7 @@ const { MessageFlags } = require('discord.js');
 
 const { Errors } = require('../../utils/functions');
 
-const camps = [
+const campsBase = [
   { 'id': 'office_aux_prison_select', 'type': 'user_select' },
   { 'id': 'office_aux_prison_id', 'type': 'text' },
   { 'id': 'office_aux_prison_name', 'type': 'text' },
@@ -37,21 +37,21 @@ const camps = [
 
 const command = async(client, modal, args) => {
   try {
-    console.log('COMPONENTS => ', args, modal.components);
-    console.log('COMPONENTS FIND', modal.components.find((r) => r.component.customId === 'office_aux_prison_select')?.component?.values);
-
-    for (const camp of camps) {
-      console.log(camp);
+    const camps = {};
+    for (const camp of campsBase) {
+      const component = modal.components.find((r) => r?.component?.customId === camp.id)?.component;
+      camps[camp.id] = component?.values || component?.value;
+      if (camp.type === 'files' && component) camps[camp.id] = component.attachments?.first()?.url;
     }
 
-    const office_aux_prison = modal.fields.getSelectMenuValue('office_aux_prison_select');
-    console.log(office_aux_prison);
+
+
+    console.log(camps);
     
 
     // modal.fields.getUploadedFiles('ID') // GET FILE
     // modal.fields.getTextInputValue('ID') // GET TEXT
     // modal.fields.getStringSelectValues('ID') // GET SELECT
-    // modal.fields.getUserSelectValues('ID') // GET USER
 
   } catch(err) {
     return Errors(err, `Command ${__filename}`)
