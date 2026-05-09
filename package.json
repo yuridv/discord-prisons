@@ -1,6 +1,6 @@
 {
-  "name": "discord-prisons",
-  "description": "A simple prison management bot created to meet the needs of police battalion clients in the game GTA V (FiveM)",
+  "name": "discord-police",
+  "description": "A simple police management bot created to meet the needs of police battalion clients in the game GTA V (FiveM)",
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yuridv/discord-prisons.git"
+    "url": "git+https://github.com/yuridv/discord-police.git"
   },
   "keywords": [
     "node",
@@ -24,9 +24,9 @@
   "author": "Yuri",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yuridv/discord-prisons/issues"
+    "url": "https://github.com/yuridv/discord-police/issues"
   },
-  "homepage": "https://github.com/yuridv/discord-prisons#readme",
+  "homepage": "https://github.com/yuridv/discord-police#readme",
   "engines": {
     "node": ">=24.0.0"
   },

@@ -32,7 +32,7 @@ const command = async(client, interaction, args) => {
     if (!interaction.member.roles.cache.has(config.roles.prison)) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
-        .setDescription('❌ • *Você não possui o* __***Curso Prisional***__ *para efetuar prisões!*');
+        .setDescription(`${emojis.error} • *Você não possui o* __***Curso Prisional***__ *para efetuar prisões!*`);
 
       return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ] });
     }
@@ -54,7 +54,7 @@ const command = async(client, interaction, args) => {
     }
     
     const modal = new ModalBuilder()
-      .setCustomId(`prison/edit-${id}`)
+      .setCustomId(`prison/edit-${camp}-${id}`)
       .setTitle('Registro de Prisão');
 
     modal.addLabelComponents(
@@ -127,9 +127,9 @@ const Types = {
 };
 
 const campsBase = {
-  offices_prison: [
+  officers_prison: [
     { 
-      id: 'office_aux_prison_select', 
+      id: 'users', 
       type: 'users',
       title: 'Oficial Auxiliar', 
       description: 'Selecione o oficial auxiliar responsável pelo registro da prisão do detento.', 
@@ -137,7 +137,7 @@ const campsBase = {
       max: 1
     },
     { 
-      id: 'office_aux_prison_id', 
+      id: 'id', 
       type: 'text', 
       type_text: 'Short', 
       title: 'Passaporte do Oficial Auxiliar', 
@@ -145,7 +145,7 @@ const campsBase = {
       placeholder: '344'
     },
     { 
-      id: 'office_aux_prison_name', 
+      id: 'name', 
       type: 'text', 
       type_text: 'Short', 
       title: 'Nome do Oficial Auxiliar', 
@@ -153,9 +153,9 @@ const campsBase = {
       placeholder: 'Dragon Luthor'
     }
   ],
-  offices_conduction: [
+  officers_conduction: [
     { 
-      id: 'offices_conduction_select', 
+      id: 'users', 
       type: 'users', 
       title: 'Oficiais Condução', 
       description: 'Selecione até 2 oficias responsáveis pela condução da prisão do detento.', 
@@ -163,7 +163,7 @@ const campsBase = {
       max: 2 
     },
     { 
-      id: 'office_conduction_id', 
+      id: 'id', 
       type: 'text', 
       type_text: 'Short', 
       title: 'Passaporte do Oficial', 
@@ -171,7 +171,7 @@ const campsBase = {
       placeholder: '344'
     },
     { 
-      id: 'office_conduction_name', 
+      id: 'name', 
       type: 'text', 
       type_text: 'Short', 
       title: 'Nome do Oficial', 
@@ -179,7 +179,7 @@ const campsBase = {
       placeholder: 'Dragon Luthor'
     },
     { 
-      id: 'office_aux_conduction_id', 
+      id: 'aux_id', 
       type: 'text', 
       type_text: 'Short', 
       title: 'Passaporte do Oficial Auxiliar', 
@@ -187,7 +187,7 @@ const campsBase = {
       placeholder: '345'
     },
     { 
-      id: 'office_aux_conduction_name', 
+      id: 'aux_name', 
       type: 'text', 
       type_text: 'Short', 
       title: 'Nome do Oficial Auxiliar', 
@@ -197,20 +197,20 @@ const campsBase = {
   ],
   attorney: [
     { 
-      id: 'office_attorney_select', 
+      id: 'exemption', 
       type: 'select', 
       title: 'Ausência de Advogado', 
       description: 'Selecione o motivo da ausência do advogado.', 
       placeholder: 'Selecione o motivo', 
       options: [
         { label: 'O réu dispensou a presença de um advogado', value: '1' },
-        { label: 'O serviço de advogado está indisponível', value: '2' },
-        { label: 'Nenhum advogado aceitou o chamado', value: '3' }
+        { label: 'Nenhum advogado aceitou o chamado', value: '2' },
+        { label: 'O serviço do tribunal está indisponível', value: '3' }
       ],
       max: 1
     },
     { 
-      id: 'office_attorney_id', 
+      id: 'id', 
       type: 'text', 
       type_text: 'Short', 
       title: 'Passaporte do Oficial', 
@@ -218,7 +218,7 @@ const campsBase = {
       placeholder: '344'
     },
     { 
-      id: 'office_attorney_name', 
+      id: 'name', 
       type: 'text', 
       type_text: 'Short', 
       title: 'Nome do Oficial', 
@@ -228,7 +228,7 @@ const campsBase = {
   ],
   prisoner: [
     { 
-      id: 'prisoner_id', 
+      id: 'ud', 
       type: 'text', 
       type_text: 'Short',
       title: 'Passaporte do Detento', 
@@ -236,7 +236,7 @@ const campsBase = {
       placeholder: '533'
     },
     { 
-      id: 'prisoner_name', 
+      id: 'name', 
       type: 'text', 
       type_text: 'Short', 
       title: 'Nome do Detento', 
@@ -244,7 +244,7 @@ const campsBase = {
       placeholder: 'Lian Ragnar'
     },
     {
-      id: 'prisoner_file', 
+      id: 'rg_image', 
       type: 'files',
       title: 'Foto do Detento', 
       description: 'Anexe a foto do detento com o RG visível.',
@@ -254,7 +254,7 @@ const campsBase = {
   ],
   articles: [
     { 
-      id: 'articles1_select', 
+      id: 'list1', 
       type: 'select', 
       title: 'Artigos [1 - 25]', 
       description: 'Selecione os artigos de crimes cometido pelo detento.', 
@@ -262,7 +262,7 @@ const campsBase = {
       options: Articles.filter((_, i) => i < 25).map((article) => ({ label: `Art. ${article.article} - ` + article.name, value: article.article }))
     },
     { 
-      id: 'articles2_select', 
+      id: 'list2', 
       type: 'select', 
       title: 'Lista de Artigos [26 - 50]', 
       description: 'Selecione os artigos de crimes cometido pelo detento.', 
@@ -270,7 +270,7 @@ const campsBase = {
       options: Articles.filter((_, i) => i >= 25 && i < 50).map((article) => ({ label: `Art. ${article.article} - ` + article.name, value: article.article }))
     },
     { 
-      id: 'articles3_select', 
+      id: 'list3', 
       type: 'select', 
       title: 'Lista de Artigos [51 - 75]', 
       description: 'Selecione os artigos de crimes cometido pelo detento.', 
@@ -278,7 +278,7 @@ const campsBase = {
       options: Articles.filter((_, i) => i >= 50 && i < 75).map((article) => ({ label: `Art. ${article.article} - ` + article.name, value: article.article }))
     },
     { 
-      id: 'articles4_select', 
+      id: 'list4', 
       type: 'select', 
       title: 'Lista de Artigos [76 - 100]', 
       description: 'Selecione os artigos de crimes cometido pelo detento.', 
@@ -286,7 +286,7 @@ const campsBase = {
       options: Articles.filter((_, i) => i >= 75 && i < 100).map((article) => ({ label: `Art. ${article.article} - ` + article.name, value: article.article }))
     },
     {
-      id: 'articles_file', 
+      id: 'bag_image', 
       type: 'files',
       title: 'Foto da Mochila', 
       description: 'Anexe a foto da mochila do detento.',
@@ -296,7 +296,7 @@ const campsBase = {
   ],
   bail_paid: [
     { 
-      id: 'bail_paid_select', 
+      id: 'articles', 
       type: 'select', 
       title: 'Artigos Cometidos', 
       description: 'Selecione os artigos cometido pelo detento e que foi paga a fiança.', 
@@ -308,7 +308,7 @@ const campsBase = {
   ],
   sentence: [
     { 
-      id: 'sentence_months', 
+      id: 'months', 
       type: 'text', 
       type_text: 'Short', 
       title: 'Tempo da Pena', 
@@ -316,7 +316,7 @@ const campsBase = {
       placeholder: '100'
     },
     { 
-      id: 'sentence_fine', 
+      id: 'fine', 
       type: 'text', 
       type_text: 'Short', 
       title: 'Multa', 
@@ -324,7 +324,7 @@ const campsBase = {
       placeholder: '100000'
     },
     { 
-      id: 'sentence_reduction', 
+      id: 'reduction', 
       type: 'select', 
       title: 'Reduções', 
       description: 'Selecione as reduções que o detento teve.', 
@@ -332,7 +332,7 @@ const campsBase = {
       options: Reductions.map((reduction) => ({ label: reduction.name, value: String(reduction.percentage) }))
     },
     { 
-      id: 'bo_pm', 
+      id: 'police_report', 
       type: 'text', 
       type_text: 'Short', 
       title: 'B.O. P.M.', 
@@ -340,7 +340,7 @@ const campsBase = {
       placeholder: '#100'
     },
     {
-      id: 'sentence_file', 
+      id: 'panel_image', 
       type: 'files',
       title: 'Foto do Painel', 
       description: 'Anexe a foto do painel com o resultado da prisão do detento.',

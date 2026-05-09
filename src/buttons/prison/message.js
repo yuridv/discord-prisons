@@ -62,7 +62,7 @@ const command = async(client, interaction, args) => {
         title: `${emojis.arrow_right_animated} **Oficiais Penitenciários:**`,
         description: `\`\`\`ini\n${prison.officers_prison.map((office) => `[${office.id}] ${office.name}`).join('\n') || 'Não Definido'}\`\`\``,
         button: {
-          id: `prison/edit-offices_prison-${args[0]}`,
+          id: `prison/edit-officers_prison-${args[0]}`,
           emoji: emojis.pencil,
           style: ButtonStyle.Secondary
         }
@@ -72,7 +72,7 @@ const command = async(client, interaction, args) => {
         title: `${emojis.arrow_right_animated} **Oficiais da Primária:**`,
         description: `\`\`\`ini\n${prison.officers_conduction.map((office) => `[${office.id}] ${office.name}`).join('\n') || 'Não Definido'}\`\`\``,
         button: {
-          id: `prison/edit-offices_conduction-${args[0]}`,
+          id: `prison/edit-officers_conduction-${args[0]}`,
           emoji: emojis.pencil,
           style: ButtonStyle.Secondary
         }
@@ -179,7 +179,11 @@ const command = async(client, interaction, args) => {
 
     const container = newContainer(items);
 
-    await channel.send({ components: [ container ], flags: MessageFlags.IsComponentsV2 });
+    if (interaction.message) {
+      return interaction.message.edit({ components: [ container ], flags: MessageFlags.IsComponentsV2 });
+    } else {
+      return channel.send({ components: [ container ], flags: MessageFlags.IsComponentsV2 });
+    }
   } catch(err) {
     return Errors(err, `Command ${__filename}`)
       .then(() => command(client, interaction))

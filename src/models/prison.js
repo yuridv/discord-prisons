@@ -40,7 +40,7 @@ const schema = new mongoose.Schema({
   articles: [ articleSchema ], // Artigos da prisão
   months: { type: Number, required: true }, // Tempo total da pena
   fine: { type: Number, required: true }, // Multa total
-  bo_pm: { type: Number, required: true }, // Número do Boletim de Ocorrência
+  police_report: { type: Number, required: false }, // Número do Boletim de Ocorrência
   reduction: [ reductionSchema ], // Reduções aplicadas
   evidences: [ evidenceSchema ] // Evidencias anexadas
 }, { timestamps: true });
