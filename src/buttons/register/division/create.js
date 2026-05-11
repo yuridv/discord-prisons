@@ -1,0 +1,106 @@
+const {
+  MessageFlags,
+  EmbedBuilder,
+  ModalBuilder
+} = require('discord.js');
+
+const { Errors, ModalTypes } = require('../../../utils/functions');
+
+const config = require('../../../../config.json');
+const emojis = require('../../../../emojis.json');
+
+const button = async(client, interaction) => {
+  try {
+    if (!interaction.member.roles.cache.has(config.roles.register.random)) {
+      const embed = new EmbedBuilder()
+        .setColor('#FF0000')
+        .setDescription(`${emojis.error} • *Você precisa ter o cargo* __***<@&${config.roles.register.random}>***__ *para efetuar o seu registro!*`);
+
+      return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ] });
+    }
+
+    if (interaction.member.roles.cache.has(config.roles.register.waiting)) {
+      const embed = new EmbedBuilder()
+        .setColor('#FF0000')
+        .setDescription(`${emojis.error} • *Você já efetuou o seu* __***Registro***__ *aguarde até aprovarem!*`);
+
+      return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ] });
+    }
+
+    const modal = new ModalBuilder()
+      .setCustomId('register/division')
+      .setTitle('Dados do Registro');
+
+    modal.addLabelComponents(
+      camps.map((c) => ModalTypes[c.type](c))
+    );
+
+    return interaction.showModal(modal);
+  } catch(err) {
+    return Errors(err, `Button ${__filename}`);
+  }
+};
+
+module.exports = { route: button };
+
+
+const camps = [
+  { 
+    id: 'passport', 
+    type: 'text',
+    type_text: 'Short', 
+    title: 'Passaporte', 
+    description: 'Escreva o número do seu passaporte dentro da cidade', 
+    placeholder: '344',
+    required: true
+  },
+  {
+    id: 'name',
+    type: 'text',
+    type_text: 'Short', 
+    title: 'Nome e Sobrenome',
+    description: 'Escreva o seu nome e sobrenome dentro da cidade',
+    placeholder: 'Dragon Luthor',
+    required: true
+  },
+  {
+    id: 'division', 
+    type: 'select', 
+    title: 'Divisão', 
+    description: 'Selecione a divisão que você pertence.', 
+    placeholder: 'Selecione a divisão', 
+    options: [
+      { label: '・SPEED', value: 'SPEED', emoji: '🚓' },
+      { label: '・GRAER', value: 'GRAER', emoji: '🚁' },
+      { label: '・GTM', value: 'GTM', emoji: '🏍️' }
+    ],
+    max: 1,
+    min: 1,
+    required: true
+  },
+  {
+    id: 'battalion', 
+    type: 'select', 
+    title: 'Guarnição', 
+    description: 'Selecione a guarnição que você pertence.', 
+    placeholder: 'Selecione a guarnição', 
+    options: [
+      { label: '・Militar', value: 'Militar', emoji: '🚨' },
+      { label: '・Civil', value: 'Civil', emoji: '🕵️‍♀️' },
+      { label: '・Exército', value: 'Exército', emoji: '🪂' },
+      { label: '・Penal', value: 'Penal', emoji: '🔦' }
+    ],
+    max: 1,
+    min: 1,
+    required: true
+  },
+  {
+    id: 'recruiter',
+    type: 'text',
+    type_text: 'Short', 
+    title: 'Passaporte do Recrutador',
+    description: 'Escreva o passaporte do oficial responsável por recrutar você.',
+    placeholder: '344',
+    required: true
+  }
+];

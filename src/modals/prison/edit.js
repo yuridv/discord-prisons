@@ -170,11 +170,12 @@ const command = async(client, modal, args) => {
       }
 
       // ----- extract official name/id from nickname -----
-      if (id === 'id') {
+      if (id === 'id' || id === 'aux_id') {
         const member = findMemberByIdInNickname(modal.guild, values[id]);
         if (member && member.nickname) {
           const { name } = extractNameId(member.nickname);
-          values['name'] = name;
+          if (id === 'id') values['name'] = name;
+          if (id === 'aux_id') values['aux_name'] = name;
         }
       }
     }

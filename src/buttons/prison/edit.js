@@ -1,16 +1,10 @@
 const {
   MessageFlags,
   EmbedBuilder,
-  ModalBuilder,
-  UserSelectMenuBuilder,
-  LabelBuilder,
-  TextInputBuilder,
-  TextInputStyle,
-  StringSelectMenuBuilder,
-  FileUploadBuilder
+  ModalBuilder
 } = require('discord.js');
 
-const { Errors } = require('../../utils/functions');
+const { Errors, ModalTypes } = require('../../utils/functions');
 const Prison = require('../../models/prison');
 
 const config = require('../../../config.json');
@@ -19,7 +13,7 @@ const emojis = require('../../../emojis.json');
 const Articles = require('../../../articles.json');
 const Reductions = require('../../../reductions.json');
 
-const command = async(client, interaction, args) => {
+const button = async(client, interaction, args) => {
   try {
     const camp = args[0];
     const id = args[1];
@@ -29,7 +23,7 @@ const command = async(client, interaction, args) => {
     const camps = JSON.parse(JSON.stringify(campsBase));
     if (!camps[camp]) return;
 
-    if (!interaction.member.roles.cache.has(config.roles.prison)) {
+    if (!interaction.member.roles.cache.has(config.roles.prisons.class)) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
         .setDescription(`${emojis.error} • *Você não possui o* __***Curso Prisional***__ *para efetuar prisões!*`);
@@ -58,72 +52,17 @@ const command = async(client, interaction, args) => {
       .setTitle('Registro de Prisão');
 
     modal.addLabelComponents(
-      camps[camp].map((c) => Types[c.type](c))
+      camps[camp].map((c) => ModalTypes[c.type](c))
     );
 
     await interaction.showModal(modal);
 
     return;
   } catch(err) {
-    return Errors(err, `Command ${__filename}`)
-      .then(() => command(client, interaction))
+    return Errors(err, `Button ${__filename}`)
+      .then(() => button(client, interaction))
       .catch((e) => interaction.reply({ content: e.error, flags: MessageFlags.Ephemeral }));
   }
-};
-
-const Types = {
-  users: (camp) => 
-    new LabelBuilder()
-      .setLabel(camp.title)
-      .setDescription(camp.description)
-      .setUserSelectMenuComponent(
-        new UserSelectMenuBuilder()
-          .setCustomId(camp.id)
-          .setPlaceholder(camp.placeholder)
-          .setMinValues(camp.min || 0)
-          .setMaxValues(camp.max || 10)
-          .setRequired(camp.required ? true : false)
-      ),
-  text: (camp) =>
-    new LabelBuilder()
-      .setLabel(camp.title)
-      .setDescription(camp.description)
-      .setTextInputComponent(
-        new TextInputBuilder()
-          .setCustomId(camp.id)
-          .setPlaceholder(camp.placeholder)
-          .setRequired(camp.required ? true : false)
-          .setStyle(TextInputStyle[camp.type_text])
-      ),
-  select: (camp) =>
-    new LabelBuilder()
-      .setLabel(camp.title)
-      .setDescription(camp.description)
-      .setStringSelectMenuComponent(
-        new StringSelectMenuBuilder()
-          .setCustomId(camp.id)
-          .setPlaceholder(camp.placeholder)
-          .setMinValues(camp.min || 0)
-          .setMaxValues(camp.max || camp.options.length)
-          .setRequired(camp.required ? true : false)
-          .addOptions(
-            camp.options.map((option) => ({
-              label: option.label,
-              value: String(option.value)
-            }))
-          )
-      ),
-  files: (camp) =>
-    new LabelBuilder()
-      .setLabel(camp.title)
-      .setDescription(camp.description)
-      .setFileUploadComponent(
-        new FileUploadBuilder()
-          .setCustomId(camp.id)
-          .setRequired(camp.required ? true : false)
-          .setMinValues(camp.min || 0)
-          .setMaxValues(camp.max || 10)
-      )
 };
 
 const campsBase = {
@@ -351,5 +290,5 @@ const campsBase = {
 };
 
 module.exports = { 
-  route: command
+  route: button
 };

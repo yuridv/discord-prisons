@@ -1,8 +1,8 @@
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags, PermissionFlagsBits } = require('discord.js');
 
-const { Errors } = require('../../utils/functions');
-const config = require('../../../config.json');
-const emoji = require('../../../emojis.json');
+const { Errors } = require('../../../utils/functions');
+const config = require('../../../../config.json');
+const emoji = require('../../../../emojis.json');
 
 const command = async(client, interaction, args) => {
   try {
@@ -41,10 +41,16 @@ const command = async(client, interaction, args) => {
         `\n\n*__Atenciosamente ${client.user.username}__*`
       );
 
-    return interaction.reply({
+    await interaction.channel.send({
       embeds: [ embed ],
       components: [ row ]
     });
+
+    const embedSuccess = new EmbedBuilder()
+      .setColor('#00FF00')
+      .setDescription(`${emoji.success} • *Mensagem de menu enviada com sucesso!*`);
+
+    return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embedSuccess ] });
   } catch(err) {
     return Errors(err, `Command ${__filename}`)
       .then(() => command(client, interaction, args))

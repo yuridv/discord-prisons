@@ -6,7 +6,8 @@ const config = require('../../../config.json');
 
 const event = async(client, message) => {
   try {
-    if (message.channel.id !== config.channels.logs) return;
+    if (message.channel.id !== config.channels.prisons.logs) return;
+
     if (!message.embeds || !message.embeds[0] || !message.embeds[0].fields || !message.embeds[0].fields[0]) return;
 
     const embed = message.embeds[0];

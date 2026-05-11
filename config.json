@@ -1,13 +1,58 @@
 {
   "city": "Meta City",
+  "banner_city": "https://images-ext-1.discordapp.net/external/nciX62OAXaVeff3UlUKMXMV-S70XCreHD1DRhizcOcs/https/i.imgur.com/TZsMvg6.png?format=webp",
 
-  "color": "#1f3652",
+  "color": "#0147ca",
 
   "channels": {
-    "logs": "1478552914866999306",
-    "prisons": "1478552984353902623"
+    "register": {
+      "approve": "1503184193654358126"
+    },
+
+    "prisons": {
+      "logs": "1478552914866999306",
+      "records": "1478552984353902623"
+    }
   },
+
   "roles": {
-    "prison": "809276869786337322"
+    "register": {
+      "random": "1503196904496955402",
+      "waiting": "1503196907990810816"
+    },
+    "battalions": {
+      "militar": "1503197089478475939",
+      "civil": "1503197240989192242",
+      "exercito": "1503197251818885250",
+      "penal": "1503197256621494392"
+    },
+
+    "divisions": {
+      "speed": {
+        "unidade": "",
+        "comando": "",
+        "subcomando": "",
+        "agente": "",
+        "probatorio": ""
+      },
+      "graer": {
+        "unidade": "",
+        "comando": "",
+        "subcomando": "",
+        "agente": "",
+        "probatorio": ""
+      },
+      "gtm": {
+        "unidade": "",
+        "comando": "",
+        "subcomando": "",
+        "agente": "",
+        "probatorio": ""
+      }
+    },
+
+    "prisons": {
+      "class": "1503196617174548570"
+    }
   }
 }

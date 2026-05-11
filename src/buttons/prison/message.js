@@ -11,9 +11,9 @@ const Prison = require('../../models/prison');
 const emojis = require('../../../emojis.json');
 const config = require('../../../config.json');
 
-const command = async(client, interaction, args) => {
+const message = async(client, interaction, args) => {
   try {
-    const channel = interaction.guild.channels.cache.get(config?.channels?.prisons);
+    const channel = interaction.guild.channels.cache.get(config?.channels?.prisons.records);
     if (!channel) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
@@ -186,7 +186,7 @@ const command = async(client, interaction, args) => {
     }
   } catch(err) {
     return Errors(err, `Command ${__filename}`)
-      .then(() => command(client, interaction))
+      .then(() => message(client, interaction))
       .catch((e) => interaction.reply({ content: e.error, flags: MessageFlags.Ephemeral }));
   }
 };
@@ -230,5 +230,5 @@ const newContainer = (items) => {
 };
 
 module.exports = { 
-  route: command
+  route: message
 };
