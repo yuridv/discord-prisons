@@ -37,7 +37,9 @@ const button = async(client, interaction) => {
 
     return interaction.showModal(modal);
   } catch(err) {
-    return Errors(err, `Button ${__filename}`);
+    return Errors(err, `Button ${__filename}`)
+      .then(() => button(client, interaction))
+      .catch((e) => interaction.reply({ content: e.error, flags: MessageFlags.Ephemeral }));
   }
 };
 
@@ -87,7 +89,7 @@ const camps = [
     options: [
       { label: '・Militar', value: 'Militar', emoji: '🚨' },
       { label: '・Civil', value: 'Civil', emoji: '🕵️‍♀️' },
-      { label: '・Exército', value: 'Exército', emoji: '🪂' },
+      { label: '・Exército', value: 'Exercito', emoji: '🪂' },
       { label: '・Penal', value: 'Penal', emoji: '🔦' }
     ],
     max: 1,

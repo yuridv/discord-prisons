@@ -10,7 +10,7 @@ const event = (client) => {
       status: 'dnd',
       activities: [
         {
-          name: 'Created by MrDragon',
+          name: 'Created by Dragon',
           type: ActivityType.Streaming,
           url: 'https://twitch.tv/mrdragonzin'
         }
