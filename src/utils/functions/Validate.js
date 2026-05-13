@@ -99,7 +99,6 @@ const Types = {
     if (!user) return rej(`Não encontrei nenhum usuário com o id '${values[key]}' no servidor.`);
 
     const { passport, name } = extractName(user.nickname);
-    if (!passport || !name) return rej(`O usuário '${user.nickname}[${values[key]}]' não possui um passaporte/nome valido.`); 
 
     values[key] = {
       passport,
