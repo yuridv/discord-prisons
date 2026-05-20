@@ -9,7 +9,7 @@ const extractName = (name) => {
         ? name.trim().match(/^(.*?)\s*(?:[-|/([{]?\s*(\d+)\s*[\])}]?)?\s*$/)
         : null;
 
-    if (match && match[1] && match[1].includes('・')) match[1] = match[1].split('・')[0].trim();
+    if (match && match[1] && match[1].includes('・')) match[1] = match[1].split('・')[1].trim();
 
     return {
       passport: match && match[2] ? parseInt(match[2], 10) : null,
