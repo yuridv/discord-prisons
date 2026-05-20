@@ -1,7 +1,7 @@
 
 # Customer Management
 
-Esse projeto é um BOT do discord de gestão de prisões para um servidor de FiveM, desenvolvido em Node.JS
+Esse projeto é um BOT do discord de gestão da policia para um servidor de FiveM, desenvolvido em Node.JS
 
 ## Índice
 
@@ -43,6 +43,7 @@ No diretório do projeto, você pode executar os seguintes scripts:
 
 - **discord.js**: Biblioteca oficial da plataforma Discord.
 - **dotenv-safe**: Gerencia as variáveis do arquivo `.env`.
+- **mongoose**: Biblioteca para conexão com o MongoDB.
 
 
 ### Desenvolvimento

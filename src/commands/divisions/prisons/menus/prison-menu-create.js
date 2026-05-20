@@ -1,12 +1,12 @@
 const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, MessageFlags, PermissionFlagsBits } = require('discord.js');
 
-const { Errors } = require('../../utils/functions');
-const config = require('../../../config.json');
-const emoji = require('../../../emojis.json');
+const { Errors } = require('../../../../utils/functions');
+const config = require('../../../../../config.json');
+const emoji = require('../../../../../emojis.json');
 
 const command = async(client, interaction, args) => {
   try {
-    if (!interaction.member.permissions.has(PermissionFlagsBits.ADMINISTRATOR)) {
+    if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
         .setDescription(`${emoji.error} • *Você não possui permissão de* __***ADMINISTRADOR***__ *para utilizar esse comando!*`);
@@ -15,7 +15,7 @@ const command = async(client, interaction, args) => {
     }
 
     const newPrison = new ButtonBuilder()
-      .setCustomId('prison')
+      .setCustomId('divisions/prison/create')
       .setEmoji('🚨')
       .setLabel('Registrar Prisão')
       .setStyle(ButtonStyle.Primary);
@@ -25,7 +25,6 @@ const command = async(client, interaction, args) => {
 
     const embed = new EmbedBuilder()
       .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL() })
-      .setThumbnail(config.avatar)
       .setColor(config.color)
       .setDescription(
         `*Seja bem vindo ao nosso canal de * ***Prisões*** *da cidade* ***${config.city}***!` +
@@ -41,10 +40,16 @@ const command = async(client, interaction, args) => {
         `\n\n*__Atenciosamente ${client.user.username}__*`
       );
 
-    return interaction.reply({
+    await interaction.channel.send({
       embeds: [ embed ],
       components: [ row ]
     });
+
+    const embedSuccess = new EmbedBuilder()
+      .setColor('#00FF00')
+      .setDescription(`${emoji.success} • *Mensagem de menu enviada com sucesso!*`);
+
+    return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embedSuccess ] });
   } catch(err) {
     return Errors(err, `Command ${__filename}`)
       .then(() => command(client, interaction, args))

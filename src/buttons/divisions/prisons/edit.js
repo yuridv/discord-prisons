@@ -1,0 +1,294 @@
+const {
+  MessageFlags,
+  EmbedBuilder,
+  ModalBuilder
+} = require('discord.js');
+
+const { Errors, ModalTypes } = require('../../../utils/functions');
+const Prison = require('../../../models/prison');
+
+const config = require('../../../../config.json');
+const emojis = require('../../../../emojis.json');
+
+const Articles = require('../../../../articles.json');
+const Reductions = require('../../../../reductions.json');
+
+const button = async(client, interaction, args) => {
+  try {
+    const camp = args[0];
+    const id = args[1];
+
+    if (!camp || !id) return;
+
+    const camps = JSON.parse(JSON.stringify(campsBase));
+    if (!camps[camp]) return;
+
+    if (!interaction.member.roles.cache.has(config.divisions.roles.prisons.class)) {
+      const embed = new EmbedBuilder()
+        .setColor('#FF0000')
+        .setDescription(`${emojis.error} • *Você não possui o* __***Curso Prisional***__ *para efetuar prisões!*`);
+
+      return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ] });
+    }
+
+    const prison = await Prison.findOne({ _id: id });
+    if (!prison) {
+      const embed = new EmbedBuilder()
+        .setColor('#FF0000')
+        .setDescription(`${emojis.error} • *${interaction.author || interaction.user}, não encontrei o registro da prisão selecionada!*`);
+
+      return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ], content: `${interaction.author || interaction.user}` });
+    }
+
+    if (prison.articles.length >= 1) {
+      camps.bail_paid[0].options = prison.articles
+        .map((article) => (
+          { label: `Art. ${article.article} - ` + article.name, value: String(article.article) }
+        ));
+    }
+    
+    const modal = new ModalBuilder()
+      .setCustomId(`divisions/prison/edit-${camp}-${id}`)
+      .setTitle('Registro de Prisão');
+
+    modal.addLabelComponents(
+      camps[camp].map((c) => ModalTypes[c.type](c))
+    );
+
+    await interaction.showModal(modal);
+
+    return;
+  } catch(err) {
+    return Errors(err, `Button ${__filename}`)
+      .then(() => button(client, interaction))
+      .catch((e) => interaction.reply({ content: e.error, flags: MessageFlags.Ephemeral }));
+  }
+};
+
+const campsBase = {
+  officers_prison: [
+    { 
+      id: 'users', 
+      type: 'users',
+      title: 'Oficial Auxiliar', 
+      description: 'Selecione o oficial auxiliar responsável pelo registro da prisão do detento.', 
+      placeholder: 'Selecione o oficial auxiliar',
+      max: 1
+    },
+    { 
+      id: 'id', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'Passaporte do Oficial Auxiliar', 
+      description: 'Escreva o passaporte do oficial auxiliar responsável pelo registro prisão do detento.', 
+      placeholder: '344'
+    },
+    { 
+      id: 'name', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'Nome do Oficial Auxiliar', 
+      description: 'Escreva o nome do oficial auxiliar responsável pelo registro prisão do detento.', 
+      placeholder: 'Dragon Luthor'
+    }
+  ],
+  officers_conduction: [
+    { 
+      id: 'users', 
+      type: 'users', 
+      title: 'Oficiais Condução', 
+      description: 'Selecione até 2 oficias responsáveis pela condução da prisão do detento.', 
+      placeholder: 'Selecione até 2 oficiais',
+      max: 2 
+    },
+    { 
+      id: 'id', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'Passaporte do Oficial', 
+      description: 'Escreva o passaporte do oficial responsável pela condução da prisão do detento.', 
+      placeholder: '344'
+    },
+    { 
+      id: 'name', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'Nome do Oficial', 
+      description: 'Escreva o nome do oficial responsável pela condução da prisão do detento.', 
+      placeholder: 'Dragon Luthor'
+    },
+    { 
+      id: 'aux_id', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'Passaporte do Oficial Auxiliar', 
+      description: 'Escreva o passaporte do oficial auxiliar responsável pela condução da prisão do detento.', 
+      placeholder: '345'
+    },
+    { 
+      id: 'aux_name', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'Nome do Oficial Auxiliar', 
+      description: 'Escreva o nome do oficial auxiliar responsável pela condução da prisão do detento.', 
+      placeholder: 'Mel Luthor'
+    }
+  ],
+  attorney: [
+    { 
+      id: 'exemption', 
+      type: 'select', 
+      title: 'Ausência de Advogado', 
+      description: 'Selecione o motivo da ausência do advogado.', 
+      placeholder: 'Selecione o motivo', 
+      options: [
+        { label: 'O réu dispensou a presença de um advogado', value: '1' },
+        { label: 'Nenhum advogado aceitou o chamado', value: '2' },
+        { label: 'O serviço do tribunal está indisponível', value: '3' }
+      ],
+      max: 1
+    },
+    { 
+      id: 'id', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'Passaporte do Oficial', 
+      description: 'Escreva o passaporte do advogado responsável pela defesa do réu.', 
+      placeholder: '344'
+    },
+    { 
+      id: 'name', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'Nome do Oficial', 
+      description: 'Escreva o nome do advogado responsável pela defesa do réu.', 
+      placeholder: 'Dragon Luthor'
+    }
+  ],
+  prisoner: [
+    { 
+      id: 'ud', 
+      type: 'text', 
+      type_text: 'Short',
+      title: 'Passaporte do Detento', 
+      description: 'Escreva o passaporte do detento.', 
+      placeholder: '533'
+    },
+    { 
+      id: 'name', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'Nome do Detento', 
+      description: 'Escreva o nome do detento.', 
+      placeholder: 'Lian Ragnar'
+    },
+    {
+      id: 'rg_image', 
+      type: 'files',
+      title: 'Foto do Detento', 
+      description: 'Anexe a foto do detento com o RG visível.',
+      min: 1,
+      max: 1
+    }
+  ],
+  articles: [
+    { 
+      id: 'list1', 
+      type: 'select', 
+      title: 'Artigos [1 - 25]', 
+      description: 'Selecione os artigos de crimes cometido pelo detento.', 
+      placeholder: 'Selecione os artigos da lista 1', 
+      options: Articles.filter((_, i) => i < 25).map((article) => ({ label: `Art. ${article.article} - ` + article.name, value: article.article }))
+    },
+    { 
+      id: 'list2', 
+      type: 'select', 
+      title: 'Lista de Artigos [26 - 50]', 
+      description: 'Selecione os artigos de crimes cometido pelo detento.', 
+      placeholder: 'Selecione os artigos da lista 2', 
+      options: Articles.filter((_, i) => i >= 25 && i < 50).map((article) => ({ label: `Art. ${article.article} - ` + article.name, value: article.article }))
+    },
+    { 
+      id: 'list3', 
+      type: 'select', 
+      title: 'Lista de Artigos [51 - 75]', 
+      description: 'Selecione os artigos de crimes cometido pelo detento.', 
+      placeholder: 'Selecione os artigos da lista 3', 
+      options: Articles.filter((_, i) => i >= 50 && i < 75).map((article) => ({ label: `Art. ${article.article} - ` + article.name, value: article.article }))
+    },
+    { 
+      id: 'list4', 
+      type: 'select', 
+      title: 'Lista de Artigos [76 - 100]', 
+      description: 'Selecione os artigos de crimes cometido pelo detento.', 
+      placeholder: 'Selecione os artigos da lista 4',
+      options: Articles.filter((_, i) => i >= 75 && i < 100).map((article) => ({ label: `Art. ${article.article} - ` + article.name, value: article.article }))
+    },
+    {
+      id: 'bag_image', 
+      type: 'files',
+      title: 'Foto da Mochila', 
+      description: 'Anexe a foto da mochila do detento.',
+      min: 1,
+      max: 1
+    }
+  ],
+  bail_paid: [
+    { 
+      id: 'articles', 
+      type: 'select', 
+      title: 'Artigos Cometidos', 
+      description: 'Selecione os artigos cometido pelo detento e que foi paga a fiança.', 
+      placeholder: 'Selecione os artigos que foi pago a fiança', 
+      options: [
+        { label: 'Selecione os artigos que o réu está sendo acusado antes', value: '0' }
+      ]
+    }
+  ],
+  sentence: [
+    { 
+      id: 'months', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'Tempo da Pena', 
+      description: 'Escreva o tempo da pena em meses em que o detento ficará preso.', 
+      placeholder: '100'
+    },
+    { 
+      id: 'fine', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'Multa', 
+      description: 'Escreva o valor da multa em que o detento deverá pagar.', 
+      placeholder: '100000'
+    },
+    { 
+      id: 'reduction', 
+      type: 'select', 
+      title: 'Reduções', 
+      description: 'Selecione as reduções que o detento teve.', 
+      placeholder: 'Selecione as reduções', 
+      options: Reductions.map((reduction) => ({ label: reduction.name, value: String(reduction.percentage) }))
+    },
+    { 
+      id: 'police_report', 
+      type: 'text', 
+      type_text: 'Short', 
+      title: 'B.O. P.M.', 
+      description: 'Escreva a numeração do Boletim de Ocorrência registrado na PM.', 
+      placeholder: '#100'
+    },
+    {
+      id: 'panel_image', 
+      type: 'files',
+      title: 'Foto do Painel', 
+      description: 'Anexe a foto do painel com o resultado da prisão do detento.',
+      min: 1,
+      max: 1
+    }
+  ]
+};
+
+module.exports = { 
+  route: button
+};
