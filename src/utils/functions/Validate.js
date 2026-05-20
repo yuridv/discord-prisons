@@ -34,7 +34,7 @@ const Validate = (values = {}, moldes = {}, errors = []) => new Promise(async(re
 
     for (const key in values) if (!moldes[key]) delete values[key];
 
-    if (errors) return rej({ errors });
+    if (errors && errors.length >= 1) return rej({ errors });
 
     return res(values);
   } catch(err) {
@@ -95,7 +95,7 @@ const Types = {
   id: async(key, values, guild) => new Promise(async(res,rej) => {
     if (!guild) return rej('Não foi passado o objeto do servidor. Reporte ao meu desenvolvedor!');
 
-    const user = await guild.members.fetch(values[key]);
+    const user = await guild.members.cache.get(values[key]);
     if (!user) return rej(`Não encontrei nenhum usuário com o id '${values[key]}' no servidor.`);
 
     const { passport, name } = extractName(user.nickname);
@@ -106,8 +106,6 @@ const Types = {
       member: user
     };
 
-    values[key] = String(values[key]).replace(/\D/g, '');
-    if (values[key].length > 3) return rej(`O campo '${key}' não é um passaporte valido.`);
     return res();
   }),
 

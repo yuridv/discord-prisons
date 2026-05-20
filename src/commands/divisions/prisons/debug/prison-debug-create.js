@@ -1,12 +1,11 @@
-const { PermissionFlagsBits, EmbedBuilder, MessageFlags, ContainerBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { MessageFlags } = require('discord.js');
 
-const { Errors } = require('../../utils/functions');
-const config = require('../../../config.json');
-const emoji = require('../../../emojis.json');
+const { Errors } = require('../../../../utils/functions');
+const emoji = require('../../../../../emojis.json');
 
 const command = async(client, interaction, args) => {
   try {
-    return require('../../buttons/prison/message')
+    return require('../../../buttons/divisions/prison/message')
       .route(client, interaction, [ '69bc0f3e568e72cfdd640e40' ]);
   } catch (err) {
     return Errors(err, `Command ${__filename}`)

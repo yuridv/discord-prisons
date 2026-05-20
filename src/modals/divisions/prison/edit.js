@@ -1,8 +1,8 @@
 const { MessageFlags, EmbedBuilder } = require('discord.js');
 
-const { Errors } = require('../../utils/functions');
-const emojis = require('../../../emojis.json');
-const Prison = require('../../models/prison');
+const { Errors } = require('../../../utils/functions');
+const emojis = require('../../../../emojis.json');
+const Prison = require('../../../models/prison');
 
 const campsBase = {
   'officers_prison': {
@@ -223,7 +223,7 @@ const command = async(client, modal, args) => {
 
     await modal.reply({ content: '✅ • *Prisão atualizada com sucesso!*', flags: MessageFlags.Ephemeral });
 
-    return require('../../buttons/prison/message').route(client, modal, [ prisonId ]);
+    return require('../../../buttons/prison/message').route(client, modal, [ prisonId ]);
   } catch (err) {
     return Errors(err, `Command ${__filename}`)
       .then(() => command(client, modal))

@@ -1,12 +1,12 @@
 const { MessageFlags, EmbedBuilder, ButtonStyle } = require('discord.js');
 
-const { Errors, Validate, Container } = require('../../utils/functions');
-const emojis = require('../../../emojis.json');
-const config = require('../../../config.json');
+const { Errors, Validate, Container } = require('../../../utils/functions');
+const emojis = require('../../../../emojis.json');
+const config = require('../../../../config.json');
 
 const Modal = async(client, modal) => {
   try {
-    const channel = modal.guild.channels.cache.get(config?.channels?.register.approve);
+    const channel = modal.guild.channels.cache.get(config.divisions.channels.register.approve);
     if (!channel) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
@@ -48,17 +48,13 @@ const Modal = async(client, modal) => {
       return modal.reply({ content: `<@${modal.user.id}>`, embeds: [ embed ], flags: MessageFlags.Ephemeral });
     }
 
-    const roles_division = config.roles.divisions[values.division.toLowerCase()];
-    if (!roles_division?.unidade) {
-      const embed = new EmbedBuilder()
-        .setColor('#FF0000')
-        .setDescription(`${emojis.error} • *Não foi possível encontrar o cargo da divisão* __***${values.division.toUpperCase()}***__ *na configuração!*`);
-
-      return modal.reply({ content: `<@${modal.user.id}>`, embeds: [ embed ], flags: MessageFlags.Ephemeral });
-    }
-
+    const roles_division = config.divisions.roles.register.unidades[values.division];
     if (
-      ![ roles_division.comando, roles_division.subcomando, roles_division.instrutor ]
+      ![
+        roles_division[roles_division.length - 1], // COMANDO
+        roles_division[roles_division.length - 2], // SUB-COMANDO
+        roles_division[roles_division.length - 3] // INSTRUTOR
+      ]
         .some((role) => values.recruiter.member.roles.cache.has(role))
     ) {
       const embed = new EmbedBuilder()
@@ -68,7 +64,18 @@ const Modal = async(client, modal) => {
       return modal.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ], content: `<@${modal.member.id}>` });
     }
 
-    const role_battalion = config.roles.battalions[values.battalion.toLowerCase()];
+    if (
+      [ roles_division[0] ]
+        .some((role) => modal.member.roles.cache.has(role))
+    ) {
+      const embed = new EmbedBuilder()
+        .setColor('#FF0000')
+        .setDescription(`${emojis.error} • *Você já faz parte da* ***Unidade*** *selecionada!*`);
+
+      return modal.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ], content: `<@${modal.member.id}>` });
+    }
+
+    const role_battalion = config.divisions.roles.register.battalions[values.battalion];
     if (!role_battalion) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
@@ -97,10 +104,9 @@ const Modal = async(client, modal) => {
         type: 'textDisplay',
         description:
           `\n\n> ### ${emojis.handcuffs} ・ ***Informações da Divisão:***` +
-          `\n ・ **Divisão:** <@&${roles_division?.unidade}>` +
-          // `\n ・ **Divisão:** ${values?.division}` +
+          `\n ・ **Divisão:** <@&${roles_division[0]}>` +
+          `\n ・ **Batalhão:** ${values?.battalion.toUpperCase()}`
           // `\n ・ **Batalhão:** <@&${role_battalion}>`
-          `\n ・ **Batalhão:** ${values?.battalion}`
       },
       { type: 'separator' },
       {
@@ -121,13 +127,13 @@ const Modal = async(client, modal) => {
         type: 'buttons',
         buttons: [
           {
-            id: `register/division/approve-${modal.user.id}-${values.division}-${values.battalion}-${values.name}-${values.passport}`,
+            id: `divisions/register/approve-${modal.user.id}-${values.division}-${values.battalion}-${values.name}-${values.passport}`,
             emoji: emojis.success,
             label: 'Aprovar',
             style: ButtonStyle.Success
           },
           {
-            id: `register/division/deny-${modal.user.id}-${values.division}`,
+            id: `divisions/register/deny-${modal.user.id}-${values.division}`,
             emoji: emojis.error,
             label: 'Reprovar',
             style: ButtonStyle.Danger
@@ -140,7 +146,7 @@ const Modal = async(client, modal) => {
 
     await channel.send({ components: [ container ], flags: MessageFlags.IsComponentsV2 });
 
-    await modal.member.roles.add(config.roles.register.waiting).catch(() => {});
+    await modal.member.roles.add(config.divisions.roles.register.waiting).catch(() => {});
 
     const embedSuccess = new EmbedBuilder()
       .setColor('#00FF00')

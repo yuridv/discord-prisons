@@ -5,14 +5,14 @@ const {
   PermissionFlagsBits
 } = require('discord.js');
 
-const { Errors, Container } = require('../../../utils/functions');
+const { Errors, Container } = require('../../../../utils/functions');
 
-const config = require('../../../../config.json');
-const emojis = require('../../../../emojis.json');
+const config = require('../../../../../config.json');
+const emojis = require('../../../../../emojis.json');
 
 const command = async(client, interaction, args) => {
   try {
-    if (!interaction.member.permissions.has(PermissionFlagsBits.ADMINISTRATOR)) {
+    if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
         .setDescription(`${emojis.error} • *Você não possui permissão de* __***ADMINISTRADOR***__ *para utilizar esse comando!*`);
@@ -54,7 +54,7 @@ const command = async(client, interaction, args) => {
         type: 'buttons',
         buttons: [
           {
-            id: 'register/division/create',
+            id: 'divisions/register/create',
             emoji: emojis.clipboard,
             label: 'Fazer Registro',
             style: ButtonStyle.Primary
@@ -83,5 +83,5 @@ const command = async(client, interaction, args) => {
 
 module.exports = { 
   route: command,
-  description: '💬 [Menus] 💬 | Comando para gerar a mensagem de novas prisões.'
+  description: '💬 [Menus] 💬 | Comando para gerar a mensagem de registro das divisões.'
 };

@@ -5,11 +5,11 @@ const {
   ButtonStyle
 } = require('discord.js');
 
-const { Errors } = require('../../utils/functions');
-const Prison = require('../../models/prison');
+const { Errors } = require('../../../utils/functions');
+const Prison = require('../../../models/prison');
 
-const emojis = require('../../../emojis.json');
-const config = require('../../../config.json');
+const emojis = require('../../../../emojis.json');
+const config = require('../../../../config.json');
 
 const message = async(client, interaction, args) => {
   try {
@@ -62,7 +62,7 @@ const message = async(client, interaction, args) => {
         title: `${emojis.arrow_right_animated} **Oficiais Penitenciários:**`,
         description: `\`\`\`ini\n${prison.officers_prison.map((office) => `[${office.id}] ${office.name}`).join('\n') || 'Não Definido'}\`\`\``,
         button: {
-          id: `prison/edit-officers_prison-${args[0]}`,
+          id: `divisions/prison/edit-officers_prison-${args[0]}`,
           emoji: emojis.pencil,
           style: ButtonStyle.Secondary
         }
@@ -72,7 +72,7 @@ const message = async(client, interaction, args) => {
         title: `${emojis.arrow_right_animated} **Oficiais da Primária:**`,
         description: `\`\`\`ini\n${prison.officers_conduction.map((office) => `[${office.id}] ${office.name}`).join('\n') || 'Não Definido'}\`\`\``,
         button: {
-          id: `prison/edit-officers_conduction-${args[0]}`,
+          id: `divisions/prison/edit-officers_conduction-${args[0]}`,
           emoji: emojis.pencil,
           style: ButtonStyle.Secondary
         }
@@ -86,7 +86,7 @@ const message = async(client, interaction, args) => {
           `\`\`\`ini\n${prison.attorney?.exemption}\`\`\``
         || '```ini\nNão Definido```',
         button: {
-          id: `prison/edit-attorney-${args[0]}`,
+          id: `divisions/prison/edit-attorney-${args[0]}`,
           emoji: emojis.pencil,
           style: ButtonStyle.Secondary
         }
@@ -98,7 +98,7 @@ const message = async(client, interaction, args) => {
         type: 'section',
         title: `## ${emojis.handcuffs} ・ **Informações do Detento:**`,
         button: {
-          id: `prison/edit-prisoner-${args[0]}`,
+          id: `divisions/prison/edit-prisoner-${args[0]}`,
           emoji: emojis.pencil,
           style: ButtonStyle.Secondary
         }
@@ -116,7 +116,7 @@ const message = async(client, interaction, args) => {
         type: 'section',
         title: `## ${emojis.clipboard} ・ **Crimes Cometidos:**`,
         button: {
-          id: `prison/edit-articles-${args[0]}`,
+          id: `divisions/prison/edit-articles-${args[0]}`,
           emoji: emojis.pencil,
           style: ButtonStyle.Secondary
         }
@@ -139,7 +139,7 @@ const message = async(client, interaction, args) => {
             .map((article) => `Art. ${article.article} - ${article.name}`).join('\n') || 'Não Definido'
         }\`\`\``,
         button: {
-          id: `prison/edit-bail_paid-${args[0]}`,
+          id: `divisions/prison/edit-bail_paid-${args[0]}`,
           emoji: emojis.pencil,
           style: ButtonStyle.Secondary
         }
@@ -151,7 +151,7 @@ const message = async(client, interaction, args) => {
         type: 'section',
         title: `## ${emojis.pencil} ・ **Informações da Condenação:**`,
         button: {
-          id: `prison/edit-sentence-${args[0]}`,
+          id: `divisions/prison/edit-sentence-${args[0]}`,
           emoji: emojis.pencil,
           style: ButtonStyle.Secondary
         }

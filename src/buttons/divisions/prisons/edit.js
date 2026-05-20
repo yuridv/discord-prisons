@@ -4,14 +4,14 @@ const {
   ModalBuilder
 } = require('discord.js');
 
-const { Errors, ModalTypes } = require('../../utils/functions');
-const Prison = require('../../models/prison');
+const { Errors, ModalTypes } = require('../../../utils/functions');
+const Prison = require('../../../models/prison');
 
-const config = require('../../../config.json');
-const emojis = require('../../../emojis.json');
+const config = require('../../../../config.json');
+const emojis = require('../../../../emojis.json');
 
-const Articles = require('../../../articles.json');
-const Reductions = require('../../../reductions.json');
+const Articles = require('../../../../articles.json');
+const Reductions = require('../../../../reductions.json');
 
 const button = async(client, interaction, args) => {
   try {
@@ -23,7 +23,7 @@ const button = async(client, interaction, args) => {
     const camps = JSON.parse(JSON.stringify(campsBase));
     if (!camps[camp]) return;
 
-    if (!interaction.member.roles.cache.has(config.roles.prisons.class)) {
+    if (!interaction.member.roles.cache.has(config.divisions.roles.prisons.class)) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
         .setDescription(`${emojis.error} • *Você não possui o* __***Curso Prisional***__ *para efetuar prisões!*`);
@@ -48,7 +48,7 @@ const button = async(client, interaction, args) => {
     }
     
     const modal = new ModalBuilder()
-      .setCustomId(`prison/edit-${camp}-${id}`)
+      .setCustomId(`divisions/prison/edit-${camp}-${id}`)
       .setTitle('Registro de Prisão');
 
     modal.addLabelComponents(

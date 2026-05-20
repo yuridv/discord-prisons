@@ -13,7 +13,7 @@ const emojis = require('../../../../emojis.json');
 const button = async(client, interaction, args) => {
   try {
     const [ userId, division, battalion, userName, userPassport ] = args;
-    if (!userId || !division) {
+    if (!userId || !division || !battalion || !userName || !userPassport) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
         .setDescription(`${emojis.error} • *Não foi passado os dados obrigatórios para efetuar essa ação. Reporte ao meu desenvolvedor!*`);
@@ -21,7 +21,7 @@ const button = async(client, interaction, args) => {
       return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ], content: `<@${interaction.member.id}>` });
     }
 
-    const role_battalion = config.roles.battalions[battalion.toLowerCase()];
+    const role_battalion = config.divisions.roles.register.battalions[battalion];
     if (!role_battalion) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
@@ -30,9 +30,13 @@ const button = async(client, interaction, args) => {
       return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ], content: `<@${interaction.member.id}>` });
     }
 
-    const roles_division = config.roles.divisions[division.toLowerCase()];
+    const roles_division = config.divisions.roles.register.unidades[division];
     if (
-      ![ roles_division.comando, roles_division.subcomando, roles_division.instrutor ]
+      ![
+        roles_division[roles_division.length - 1], // COMANDO
+        roles_division[roles_division.length - 2], // SUB-COMANDO
+        roles_division[roles_division.length - 3]  // INSTRUTOR
+      ]
         .some((role) => interaction.member.roles.cache.has(role))
     ) {
       const embed = new EmbedBuilder()
@@ -72,20 +76,20 @@ const button = async(client, interaction, args) => {
 
     const user = interaction.guild.members.cache.get(userId);
     if (user) {
-      await user.roles.remove([
-        config.roles.register.random,
-        config.roles.register.waiting
-      ]).catch(() => {});
+      await user.roles.remove(config.divisions.roles.register.unregistered).catch(() => {});
+      await user.roles.remove(config.divisions.roles.register.waiting).catch(() => {});
+
+      await user.roles.remove(config.divisions.roles.register.battalions.militar).catch(() => {});
+      await user.roles.remove(config.divisions.roles.register.battalions.civil).catch(() => {});
+      await user.roles.remove(config.divisions.roles.register.battalions.exercito).catch(() => {});
 
       await user.roles.add([
-        config.roles.divisions.category.battalion,
-        role_battalion,
+        config.divisions.roles.register.category.battalions, // Categoria Batalhões
+        role_battalion, // Batalhão
 
-        config.roles.divisions.category.unidade,
-        roles_division.unidade,
-
-        config.roles.divisions.category.probatorio,
-        roles_division.probatorio
+        config.divisions.roles.register.category[division], // Categoria Divisões
+        roles_division[0], // Unidade da Divisão
+        roles_division[1] // Probatório da Divisão
       ]).catch(() => {});
 
       await user.setNickname(`${division.toUpperCase()}・${userName} [${userPassport}]`).catch(() => {});

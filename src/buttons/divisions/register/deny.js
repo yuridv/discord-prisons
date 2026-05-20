@@ -21,9 +21,13 @@ const button = async(client, interaction, args) => {
       return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ], content: `<@${interaction.member.id}>` });
     }
 
-    const roles_division = config.roles.divisions[division.toLowerCase()];
+    const roles_division = config.divisions.roles.register.unidades[division];
     if (
-      ![ roles_division.comando, roles_division.subcomando, roles_division.instrutor ]
+      ![
+        roles_division[roles_division.length - 1], // COMANDO
+        roles_division[roles_division.length - 2], // SUB-COMANDO
+        roles_division[roles_division.length - 3]  // INSTRUTOR
+      ]
         .some((role) => interaction.member.roles.cache.has(role))
     ) {
       const embed = new EmbedBuilder()
@@ -62,7 +66,7 @@ const button = async(client, interaction, args) => {
     container.components.pop();
 
     const user = interaction.guild.members.cache.get(userId);
-    if (user) await user.roles.remove(config.roles.register.waiting).catch(() => {});
+    if (user) await user.roles.remove(config.divisions.roles.register.waiting).catch(() => {});
 
     return interaction.message.edit({ components: [ container ] });
   } catch(err) {

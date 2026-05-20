@@ -11,24 +11,24 @@ const emojis = require('../../../../emojis.json');
 
 const button = async(client, interaction) => {
   try {
-    if (!interaction.member.roles.cache.has(config.roles.register.random)) {
+    // if (!interaction.member.roles.cache.has(config.divisions.roles.register.unregistered)) {
+    //   const embed = new EmbedBuilder()
+    //     .setColor('#FF0000')
+    //     .setDescription(`${emojis.error} • *Você precisa ter o cargo* __***<@&${config.roles.register.unregistered}>***__ *para efetuar o seu registro!*`);
+
+    //   return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ] });
+    // }
+
+    if (interaction.member.roles.cache.has(config.divisions.roles.register.waiting)) {
       const embed = new EmbedBuilder()
         .setColor('#FF0000')
-        .setDescription(`${emojis.error} • *Você precisa ter o cargo* __***<@&${config.roles.register.random}>***__ *para efetuar o seu registro!*`);
-
-      return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ] });
-    }
-
-    if (interaction.member.roles.cache.has(config.roles.register.waiting)) {
-      const embed = new EmbedBuilder()
-        .setColor('#FF0000')
-        .setDescription(`${emojis.error} • *Você já efetuou o seu* __***Registro***__ *aguarde até aprovarem!*`);
+        .setDescription(`${emojis.error} • *Você já efetuou está com um* __***Registro***__ *pendente, aguarde até aprovarem!*`);
 
       return interaction.reply({ flags: MessageFlags.Ephemeral, embeds: [ embed ] });
     }
 
     const modal = new ModalBuilder()
-      .setCustomId('register/division')
+      .setCustomId('divisions/register/create')
       .setTitle('Dados do Registro');
 
     modal.addLabelComponents(
@@ -44,7 +44,6 @@ const button = async(client, interaction) => {
 };
 
 module.exports = { route: button };
-
 
 const camps = [
   { 
@@ -72,9 +71,9 @@ const camps = [
     description: 'Selecione a divisão que você pertence.', 
     placeholder: 'Selecione a divisão', 
     options: [
-      { label: '・SPEED', value: 'SPEED', emoji: '🚓' },
-      { label: '・GRAER', value: 'GRAER', emoji: '🚁' },
-      { label: '・GTM', value: 'GTM', emoji: '🏍️' }
+      { label: '・SPEED', value: 'speed', emoji: '🚓' },
+      { label: '・GRAER', value: 'graer', emoji: '🚁' },
+      { label: '・GTM', value: 'gtm', emoji: '🏍️' }
     ],
     max: 1,
     min: 1,
@@ -87,10 +86,9 @@ const camps = [
     description: 'Selecione a guarnição que você pertence.', 
     placeholder: 'Selecione a guarnição', 
     options: [
-      { label: '・Militar', value: 'Militar', emoji: '🚨' },
-      { label: '・Civil', value: 'Civil', emoji: '🕵️‍♀️' },
-      { label: '・Exército', value: 'Exercito', emoji: '🪂' },
-      { label: '・Penal', value: 'Penal', emoji: '🔦' }
+      { label: '・Militar', value: 'militar', emoji: '🚨' },
+      { label: '・Civil', value: 'civil', emoji: '🕵️‍♀️' },
+      { label: '・Exército', value: 'exercito', emoji: '🪂' }
     ],
     max: 1,
     min: 1,
